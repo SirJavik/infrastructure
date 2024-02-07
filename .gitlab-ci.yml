@@ -20,4 +20,4 @@ include:
       state_name: $TF_STATE_NAME
       auto_apply: $TF_AUTO_APPLY
 
-stages: [validate, build, deploy, cleanup]
+stages: [validate, build, deploy]
