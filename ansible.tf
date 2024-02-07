@@ -62,8 +62,8 @@ resource "hcloud_server" "ansible" {
   }
 }
 
-resource "hcloud_server_network" "ansible_ansible_network" {
-  count      = length(hcloud_server.ansible)
+resource "hcloud_server_network" "ansible_javikweb_network" {
+  count      = var.server_count["ansible"]
   server_id  = hcloud_server.ansible[count.index].id
-  network_id = hcloud_network.ansible_network.id
+  network_id = hcloud_network.javikweb_network.id
 }
