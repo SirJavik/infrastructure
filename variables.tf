@@ -18,3 +18,10 @@ variable "server_count" {
     "mailserver" = 1
   }
 }
+
+variable "javikweb_network_ip_range" {
+  type      = string
+  sensitive = false
+
+  default = "10.100.10.0/24"
+}
