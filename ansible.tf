@@ -39,7 +39,7 @@ resource "hcloud_server" "ansible" {
   }
 
   ssh_keys = concat(
-    [hcloud_ssh_keys.user_ssh_keys.ssh_keys],
+    [data.hcloud_ssh_keys.user_ssh_keys.ssh_keys],
     [hcloud_ssh_key.terraform_ssh.name]
   )
 
