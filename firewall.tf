@@ -39,49 +39,6 @@ resource "hcloud_firewall" "default_firewall" {
   }
 }
 
-resource "hcloud_firewall" "webserver_firewall" {
-  name = "webserver-firewall"
-
-  labels = {
-    service   = "firewall"
-    serviceOf = "webserver"
-    terraform = true
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "80"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-    description = "HTTP"
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "443"
-    source_ips = [
-      "0.0.0.0/0",
-      "::/0"
-    ]
-    description = "HTTPS"
-  }
-
-  rule {
-    direction = "in"
-    protocol  = "tcp"
-    port      = "7780-7800"
-    source_ips = [
-      "10.0.1.0/24"
-    ]
-    description = "DRBD"
-  }
-
-}
-
 resource "hcloud_firewall" "mailserver_firewall" {
   name = "mailserver-firewall"
 

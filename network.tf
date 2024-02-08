@@ -22,9 +22,30 @@ resource "hcloud_network" "javikweb_network" {
   }
 }
 
-resource "hcloud_network_subnet" "javikweb_network_subnet" {
+resource "hcloud_network_subnet" "javikweb_network_ansible_subnet" {
   network_id   = hcloud_network.javikweb_network.id
   type         = "cloud"
   network_zone = "eu-central"
-  ip_range     = var.javikweb_network_ip_range
+  ip_range     = "10.10.10.0/24"
+}
+
+resource "hcloud_network_subnet" "javikweb_network_webserver_subnet" {
+  network_id   = hcloud_network.javikweb_network.id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = "10.10.20.0/24"
+}
+
+resource "hcloud_network_subnet" "javikweb_network_mailserver_subnet" {
+  network_id   = hcloud_network.javikweb_network.id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = "10.10.30.0/24"
+}
+
+resource "hcloud_network_subnet" "javikweb_network_loadbalancer_subnet" {
+  network_id   = hcloud_network.javikweb_network.id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = "10.10.40.0/24"
 }

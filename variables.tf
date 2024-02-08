@@ -16,6 +16,7 @@ variable "server_count" {
     "ansible"    = 1
     "webserver"  = 2
     "mailserver" = 1
+    "weblb"      = 1
   }
 }
 
@@ -23,5 +24,24 @@ variable "javikweb_network_ip_range" {
   type      = string
   sensitive = false
 
-  default = "10.100.10.0/24"
+  default = "10.10.0.0/16"
+}
+
+variable "domains" {
+  type      = list(string)
+  sensitive = false
+
+  default = [
+    "sirjavik.de",
+    "javik.net",
+    "benjamin-schneider.com",
+    "volunteer.rocks"
+  ]
+}
+
+variable "cloudflare_mail" {
+  type      = string
+  sensitive = false
+
+  default = "bschneider97@t-online.de"
 }
