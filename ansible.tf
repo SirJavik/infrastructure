@@ -66,8 +66,3 @@ resource "hcloud_server" "ansible" {
     ]
   }
 }
-
-resource "hcloud_firewall_attachment" "ansible_default_firewall" {
-  firewall_id = hcloud_firewall.default_firewall.id
-  server_ids  = [for server in hcloud_server.ansible : server.id]
-}

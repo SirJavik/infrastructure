@@ -68,7 +68,7 @@ resource "acme_certificate" "domains_certificate" {
     provider = "cloudflare"
 
     config = {
-      CLOUDFLARE_PROPAGATION_TIMEOUT = 60
+      CLOUDFLARE_PROPAGATION_TIMEOUT = 90
     }
   }
 }

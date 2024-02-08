@@ -50,13 +50,3 @@ resource "hcloud_server" "mailserver" {
   )
 
 }
-
-resource "hcloud_firewall_attachment" "mailserver_default_firewall" {
-  firewall_id = hcloud_firewall.default_firewall.id
-  server_ids  = [for server in hcloud_server.mailserver : server.id]
-}
-
-resource "hcloud_firewall_attachment" "mailserver_firewall" {
-  firewall_id = hcloud_firewall.mailserver_firewall.id
-  server_ids  = [for server in hcloud_server.mailserver : server.id]
-}

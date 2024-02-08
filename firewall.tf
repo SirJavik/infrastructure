@@ -147,3 +147,18 @@ resource "hcloud_firewall" "mailserver_firewall" {
     description = "StartTLS"
   }
 }
+
+resource "hcloud_firewall_attachment" "default_firewall_mailserver" {
+  firewall_id     = hcloud_firewall.default_firewall.id
+  label_selectors = ["service=mailserver"]
+}
+
+resource "hcloud_firewall_attachment" "default_firewall_ansible" {
+  firewall_id     = hcloud_firewall.default_firewall.id
+  label_selectors = ["service=ansible"]
+}
+
+resource "hcloud_firewall_attachment" "mailserver_firewall_mailserver" {
+  firewall_id     = hcloud_firewall.mailserver_firewall.id
+  label_selectors = ["service=mailserver"]
+}

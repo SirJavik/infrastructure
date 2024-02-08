@@ -13,10 +13,11 @@ variable "server_count" {
   sensitive = false
 
   default = {
-    "ansible"    = 1
-    "webserver"  = 2
-    "mailserver" = 1
-    "weblb"      = 1
+    "ansible"       = 1
+    "webserver"     = 2
+    "mailserver"    = 1
+    "weblb"         = 1
+    "storageserver" = 2
   }
 }
 
@@ -35,7 +36,8 @@ variable "domains" {
     "sirjavik.de",
     "javik.net",
     "benjamin-schneider.com",
-    "volunteer.rocks"
+    "volunteer.rocks",
+    "javik.rocks"
   ]
 }
 
