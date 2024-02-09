@@ -96,3 +96,91 @@ resource "hcloud_primary_ip" "mailserver_primary_ipv6" {
   }
 }
 
+####
+## Webserver
+####
+
+resource "hcloud_primary_ip" "webserver_primary_ipv4" {
+  count = var.server_count["webserver"]
+
+  name = format("%s-%s.%s-%s",
+    "web${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv4"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv4"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv4",
+    terraform = true
+  }
+}
+
+resource "hcloud_primary_ip" "webserver_primary_ipv6" {
+  count = var.server_count["webserver"]
+
+  name = format("%s-%s.%s-%s",
+    "web${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv6"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv6"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv6",
+    terraform = true
+  }
+}
+
+####
+## Storageserver
+####
+
+resource "hcloud_primary_ip" "storageserver_primary_ipv4" {
+  count = var.server_count["storageserver"]
+
+  name = format("%s-%s.%s-%s",
+    "storage${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv4"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv4"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv4",
+    terraform = true
+  }
+}
+
+resource "hcloud_primary_ip" "storageserver_primary_ipv6" {
+  count = var.server_count["storageserver"]
+
+  name = format("%s-%s.%s-%s",
+    "storage${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv6"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv6"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv6",
+    terraform = true
+  }
+}
+

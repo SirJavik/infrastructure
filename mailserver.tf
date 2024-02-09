@@ -44,6 +44,13 @@ resource "hcloud_server" "mailserver" {
     ip         = "10.10.30.${count.index + 1}"
   }
 
+  firewall_ids = [
+    hcloud_firewall.default_firewall.id,
+    hcloud_firewall.mailserver_firewall.id
+  ]
+
+  placement_group_id = (count.index % 2 == 0 ? hcloud_placement_group.falkenstein-placement.id : hcloud_placement_group.nuernberg-placement.id)
+
   ssh_keys = concat(
     [for key in data.hcloud_ssh_keys.user_ssh_keys.ssh_keys : key.name],
     [hcloud_ssh_key.terraform_ssh.name]

@@ -26,7 +26,7 @@ resource "hcloud_server" "ansible" {
   )
 
   image       = "debian-12"
-  server_type = "cx11"
+  server_type = "cax11"
   location    = (count.index % 2 == 0 ? "fsn1" : "nbg1")
 
   labels = {
@@ -37,6 +37,12 @@ resource "hcloud_server" "ansible" {
     ipv4 = hcloud_primary_ip.ansible_primary_ipv4[count.index].id
     ipv6 = hcloud_primary_ip.ansible_primary_ipv6[count.index].id
   }
+
+  placement_group_id = (count.index % 2 == 0 ? hcloud_placement_group.falkenstein-placement.id : hcloud_placement_group.nuernberg-placement.id)
+
+  firewall_ids = [
+    hcloud_firewall.default_firewall.id,
+  ]
 
   network {
     network_id = hcloud_network.javikweb_network.id

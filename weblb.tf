@@ -69,25 +69,28 @@ resource "hcloud_load_balancer_service" "loadbalancer_service_http" {
   count = var.server_count["weblb"]
 
   load_balancer_id = hcloud_load_balancer.loadbalancer[count.index].id
-  protocol         = "http"
+  protocol         = "https"
 
   http {
     sticky_sessions = true
     cookie_name     = "EXAMPLE_STICKY"
+    certificates = [
+      for certificate in hcloud_uploaded_certificate.domain_certificate : certificate.id
+    ]
   }
 
-  health_check {
-    protocol = "http"
-    port     = 80
-    interval = 10
-    timeout  = 5
-
-    http {
-      domain       = "example.com"
-      path         = "/healthz"
-      response     = "OK"
-      tls          = true
-      status_codes = ["200"]
-    }
-  }
+  #health_check {
+  #  protocol = "http"
+  #  port     = 443
+  #  interval = 10
+  #  timeout  = 5
+  #
+  #  http {
+  #    domain       = "example.com"
+  #    path         = "/healthz"
+  #    response     = "OK"
+  #    tls          = true
+  #    status_codes = ["200"]
+  #  }
+  #}
 }

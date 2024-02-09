@@ -37,7 +37,11 @@ variable "domains" {
     "javik.net",
     "benjamin-schneider.com",
     "volunteer.rocks",
-    "javik.rocks"
+    "javik.rocks",
+    "mondbasis24.de",
+    "undeadbrains.de",
+    "volunteering.solutions",
+    "volunteers.events"
   ]
 }
 
@@ -46,4 +50,16 @@ variable "cloudflare_mail" {
   sensitive = false
 
   default = "bschneider97@t-online.de"
+}
+
+variable "cloudflare_default_ttl" {
+  type      = number
+  sensitive = false
+  default   = 3600
+}
+
+variable "cloudflare_proxied_ttl" {
+  type      = number
+  sensitive = false
+  default   = 1
 }
