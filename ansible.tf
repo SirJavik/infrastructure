@@ -12,6 +12,37 @@
 ## Ansible
 ####
 
+resource "terraform_data" "setup_ansible" {
+  count = var.server_count["ansible"]
+
+  triggers_replace = {
+    packages = [
+      "ansible-core",
+      "htop",
+      "screen",
+      "git"
+    ]
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "root"
+    private_key = tls_private_key.terraform_ssh.private_key_openssh
+    host        = hcloud_primary_ip.ansible_primary_ipv4[count.index].ip_address
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "apt-get install -y ${join(" ", self.triggers_replace.packages)}",
+    ]
+  }
+
+  depends_on = [ 
+    terraform_data.init_setup
+   ]
+
+}
+
 resource "hcloud_server" "ansible" {
   count                    = var.server_count["ansible"]
   shutdown_before_deletion = true
@@ -53,22 +84,4 @@ resource "hcloud_server" "ansible" {
     [for key in data.hcloud_ssh_keys.user_ssh_keys.ssh_keys : key.name],
     [hcloud_ssh_key.terraform_ssh.name]
   )
-
-  connection {
-    type        = "ssh"
-    user        = "root"
-    private_key = tls_private_key.terraform_ssh.private_key_openssh
-    host        = self.ipv6_address
-  }
-
-  provisioner "file" {
-    content     = tls_private_key.terraform_ssh.private_key_openssh
-    destination = "/root/.ssh/terraform_key"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod --verbose 600 /root/.ssh/terraform_key",
-    ]
-  }
 }
