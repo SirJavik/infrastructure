@@ -41,6 +41,11 @@ resource "hcloud_server" "webserver" {
     ipv6         = hcloud_primary_ip.webserver_primary_ipv6[count.index].id
   }
 
+  firewall_ids = [
+    hcloud_firewall.default_firewall.id,
+    hcloud_firewall.webserver_firewall.id
+  ]
+
   placement_group_id = (count.index % 2 == 0 ? hcloud_placement_group.falkenstein-placement.id : hcloud_placement_group.nuernberg-placement.id)
 
   network {

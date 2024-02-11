@@ -45,6 +45,25 @@ variable "domains" {
   ]
 }
 
+variable "subdomains" {
+  type      = list(string)
+  sensitive = false
+
+  default = [
+    "grafana.sirjavik.de",
+    "status.sirjavik.de",
+    "pma.sirjavik.de",
+    "phpmyadmin.sirjavik.de",
+    "www.javik.net",
+    "www.benjamin-schneider.com",
+    "www.javik.rocks",
+    "www.mondbasis24.de",
+    "www.undeadbrains.de",
+    "www.volunteering.solutions",
+    "www.volunteers.events"
+  ]
+}
+
 variable "cloudflare_mail" {
   type      = string
   sensitive = false

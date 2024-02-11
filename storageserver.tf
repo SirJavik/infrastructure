@@ -48,6 +48,10 @@ resource "hcloud_server" "storageserver" {
     ip         = "10.10.50.${count.index + 1}"
   }
 
+  firewall_ids = [
+    hcloud_firewall.default_firewall.id
+  ]
+
   ssh_keys = concat(
     [for key in data.hcloud_ssh_keys.user_ssh_keys.ssh_keys : key.name],
     [hcloud_ssh_key.terraform_ssh.name]

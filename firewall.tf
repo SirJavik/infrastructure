@@ -39,6 +39,27 @@ resource "hcloud_firewall" "default_firewall" {
   }
 }
 
+resource "hcloud_firewall" "webserver_firewall" {
+  name = "webserver-firewall"
+
+  labels = {
+    service   = "firewall"
+    serviceOf = "webserver"
+    terraform = true
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "443"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+    description = "HTTPS"
+  }
+}
+
 resource "hcloud_firewall" "mailserver_firewall" {
   name = "mailserver-firewall"
 
