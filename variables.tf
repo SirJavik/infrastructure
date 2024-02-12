@@ -83,11 +83,6 @@ variable "cloudflare_proxied_ttl" {
   default   = 1
 }
 
-variable "gitlab_token" {
-  sensitive = true
-  type      = string
-}
-
 variable "ansible_repo" {
   type      = string
   sensitive = false
