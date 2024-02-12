@@ -86,16 +86,10 @@ variable "cloudflare_proxied_ttl" {
 variable "ansible_repo" {
   type      = string
   sensitive = false
-  default   = "https://gitlab.com/Javik/ansible.git"
+  default   = "git@gitlab.com:Javik/ansible.git"
 }
 
-variable "gitlab_user" {
-  sensitive = false
-  type      = string
-  default   = "Javik"
-}
-
-variable "gitlab_token" {
+variable "vault_password" {
   sensitive = true
   type      = string
 }

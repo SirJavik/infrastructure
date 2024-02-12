@@ -22,6 +22,9 @@ resource "terraform_data" "setup_ansible" {
       "screen",
       "git"
     ]
+    repo = var.ansible_repo
+    #key     = var.gitlab_ssh_key
+    #keyfile = "/root/.ssh/id_ed25519"
   }
 
   connection {
@@ -33,10 +36,11 @@ resource "terraform_data" "setup_ansible" {
 
   provisioner "remote-exec" {
     inline = [
+      #"mkdir /root/.ssh",
+      #"echo \"Host gitlab.com\n    StrictHostKeyChecking no\n\n\" > /root/.ssh/config",
+      #"chmod --verbose 600 ${self.triggers_replace.keyfile}",
       "apt-get install -y ${join(" ", self.triggers_replace.packages)}",
-      #"git config --global credential.https://gitlab.com.username ${var.gitlab_user}",
-      #"git config --global credential.https://gitlab.com.password ${var.gitlab_token}",
-      #"git clone ${var.ansible_repo}"
+      #"git clone ${self.triggers_replace.repo}"
     ]
   }
 
