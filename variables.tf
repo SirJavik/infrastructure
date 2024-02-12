@@ -88,3 +88,14 @@ variable "ansible_repo" {
   sensitive = false
   default   = "https://gitlab.com/Javik/ansible.git"
 }
+
+variable "gitlab_user" {
+  sensitive = false
+  type      = string
+  default   = "Javik"
+}
+
+variable "gitlab_token" {
+  sensitive = true
+  type      = string
+}

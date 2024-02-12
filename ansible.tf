@@ -34,6 +34,8 @@ resource "terraform_data" "setup_ansible" {
   provisioner "remote-exec" {
     inline = [
       "apt-get install -y ${join(" ", self.triggers_replace.packages)}",
+      #"git config --global credential.https://gitlab.com.username ${var.gitlab_user}",
+      #"git config --global credential.https://gitlab.com.password ${var.gitlab_token}",
       #"git clone ${var.ansible_repo}"
     ]
   }
