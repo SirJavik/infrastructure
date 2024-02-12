@@ -82,3 +82,14 @@ variable "cloudflare_proxied_ttl" {
   sensitive = false
   default   = 1
 }
+
+variable "gitlab_token" {
+  sensitive = true
+  type      = string
+}
+
+variable "ansible_repo" {
+  type      = string
+  sensitive = false
+  default   = "https://gitlab.com/Javik/ansible.git"
+}

@@ -34,12 +34,13 @@ resource "terraform_data" "setup_ansible" {
   provisioner "remote-exec" {
     inline = [
       "apt-get install -y ${join(" ", self.triggers_replace.packages)}",
+      #"git clone ${var.ansible_repo}"
     ]
   }
 
-  depends_on = [ 
+  depends_on = [
     terraform_data.init_setup
-   ]
+  ]
 
 }
 

@@ -12,7 +12,7 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "1.43.0"
+      version = "~> 1.43"
     }
 
     cloudflare = {
@@ -23,6 +23,11 @@ terraform {
     acme = {
       source  = "vancluever/acme"
       version = "~> 2.0"
+    }
+
+    gitlab = {
+      source  = "gitlabhq/gitlab"
+      version = "~> 16.8"
     }
   }
 
@@ -35,6 +40,10 @@ provider "hcloud" {
 }
 
 provider "cloudflare" {
+  # Maybe needed later
+}
+
+provider "gitlab" {
   # Maybe needed later
 }
 

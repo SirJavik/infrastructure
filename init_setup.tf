@@ -63,7 +63,7 @@ resource "terraform_data" "terraform_key" {
     ]
   }
 
-  depends_on = [ 
+  depends_on = [
     terraform_data.init_setup
-   ]
+  ]
 }
