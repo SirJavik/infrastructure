@@ -24,11 +24,6 @@ terraform {
       source  = "vancluever/acme"
       version = "~> 2.0"
     }
-
-    gitlab = {
-      source  = "gitlabhq/gitlab"
-      version = "~> 16.8"
-    }
   }
 
   backend "http" {
@@ -40,10 +35,6 @@ provider "hcloud" {
 }
 
 provider "cloudflare" {
-  # Maybe needed later
-}
-
-provider "gitlab" {
   # Maybe needed later
 }
 
