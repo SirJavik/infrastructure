@@ -22,7 +22,7 @@ resource "terraform_data" "setup_ansible" {
       "screen",
       "git"
     ]
-    repo = var.ansible_repo
+    #repo = var.ansible_repo
     #key     = var.gitlab_ssh_key
     #keyfile = "/root/.ssh/id_ed25519"
   }

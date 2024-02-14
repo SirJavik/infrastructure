@@ -13,7 +13,7 @@ variable "server_count" {
   sensitive = false
 
   default = {
-    "ansible"       = 1
+    "ansible"       = 0
     "webserver"     = 2
     "mailserver"    = 1
     "weblb"         = 1
@@ -53,6 +53,7 @@ variable "subdomains" {
     "grafana.sirjavik.de",
     "status.sirjavik.de",
     "pma.sirjavik.de",
+    "git.sirjavik.de",
     "phpmyadmin.sirjavik.de",
     "www.javik.net",
     "www.benjamin-schneider.com",
@@ -81,15 +82,4 @@ variable "cloudflare_proxied_ttl" {
   type      = number
   sensitive = false
   default   = 1
-}
-
-variable "ansible_repo" {
-  type      = string
-  sensitive = false
-  default   = "git@gitlab.com:Javik/ansible.git"
-}
-
-variable "vault_password" {
-  sensitive = true
-  type      = string
 }

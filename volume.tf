@@ -20,6 +20,6 @@ resource "hcloud_volume" "storage" {
     "infra.sirjavik.de",
     "StorageVolume"
   )
-  size      = 20
+  size      = 40
   server_id = hcloud_server.storageserver[count.index].id
 }
