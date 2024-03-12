@@ -184,3 +184,48 @@ resource "hcloud_primary_ip" "storageserver_primary_ipv6" {
   }
 }
 
+####
+## Icinga
+####
+
+resource "hcloud_primary_ip" "icinga_primary_ipv4" {
+  count = var.server_count["icinga"]
+
+  name = format("%s-%s.%s-%s",
+    "icinga${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv4"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv4"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv4",
+    terraform = true
+  }
+}
+
+resource "hcloud_primary_ip" "icinga_primary_ipv6" {
+  count = var.server_count["icinga"]
+
+  name = format("%s-%s.%s-%s",
+    "icinga${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "ipv6"
+  )
+
+  datacenter    = (count.index % 2 == 0 ? "fsn1-dc14" : "nbg1-dc3")
+  type          = "ipv6"
+  assignee_type = "server"
+  auto_delete   = false
+  labels = {
+    service   = "ipv6",
+    terraform = true
+  }
+}
+
+

@@ -56,3 +56,10 @@ resource "hcloud_network_subnet" "javikweb_network_storageserver_subnet" {
   network_zone = "eu-central"
   ip_range     = "10.10.50.0/24"
 }
+
+resource "hcloud_network_subnet" "javikweb_network_icinga_subnet" {
+  network_id   = hcloud_network.javikweb_network.id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = "10.10.60.0/24"
+}

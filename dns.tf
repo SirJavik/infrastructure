@@ -219,3 +219,43 @@ resource "hcloud_rdns" "storageserver_rdns_ipv6" {
   ip_address    = hcloud_primary_ip.storageserver_primary_ipv6[count.index].ip_address
   dns_ptr       = hcloud_server.storageserver[count.index].name
 }
+
+####
+## Icinga
+####
+
+## DNS
+
+resource "cloudflare_record" "icinga_dns_ipv4" {
+  count   = var.server_count["icinga"]
+  zone_id = data.cloudflare_zone.domain_zone["sirjavik.de"].id
+  name    = hcloud_server.icinga[count.index].name
+  value   = hcloud_primary_ip.icinga_primary_ipv4[count.index].ip_address
+  type    = "A"
+  ttl     = var.cloudflare_default_ttl
+}
+
+resource "cloudflare_record" "icinga_dns_ipv6" {
+  count   = var.server_count["icinga"]
+  zone_id = data.cloudflare_zone.domain_zone["sirjavik.de"].id
+  name    = hcloud_server.icinga[count.index].name
+  value   = "${hcloud_primary_ip.icinga_primary_ipv6[count.index].ip_address}1"
+  type    = "AAAA"
+  ttl     = var.cloudflare_default_ttl
+}
+
+## rDNS
+
+resource "hcloud_rdns" "icinga_rdns_ipv4" {
+  count         = var.server_count["icinga"]
+  primary_ip_id = hcloud_primary_ip.icinga_primary_ipv4[count.index].id
+  ip_address    = hcloud_primary_ip.icinga_primary_ipv4[count.index].ip_address
+  dns_ptr       = hcloud_server.icinga[count.index].name
+}
+
+resource "hcloud_rdns" "icinga_rdns_ipv6" {
+  count         = var.server_count["icinga"]
+  primary_ip_id = hcloud_primary_ip.icinga_primary_ipv6[count.index].id
+  ip_address    = hcloud_primary_ip.icinga_primary_ipv6[count.index].ip_address
+  dns_ptr       = hcloud_server.icinga[count.index].name
+}

@@ -18,6 +18,7 @@ variable "server_count" {
     "mailserver"    = 1
     "weblb"         = 1
     "storageserver" = 2
+    "icinga"        = 1
   }
 }
 
