@@ -12,15 +12,15 @@
 ## Webserver
 ####
 
-resource "hcloud_server" "webserver" {
-  count                    = var.server_count["webserver"]
+resource "hcloud_server" "loadbalancer" {
+  count                    = var.server_count["loadbalancer"]
   shutdown_before_deletion = true
 
   delete_protection  = false
   rebuild_protection = false
 
   name = format("%s-%s.%s",
-    "web${count.index + 1}",
+    "loadbalancer${count.index + 1}",
     (count.index % 2 == 0 ? "fsn1" : "nbg1"),
     "infra.sirjavik.de"
   )
@@ -30,27 +30,26 @@ resource "hcloud_server" "webserver" {
   location    = (count.index % 2 == 0 ? "fsn1" : "nbg1")
 
   labels = {
-    service   = "webserver"
+    service   = "loadbalancer"
     terraform = true
   }
 
   public_net {
     ipv4_enabled = true
     ipv6_enabled = true
-    ipv4         = hcloud_primary_ip.webserver_primary_ipv4[count.index].id
-    ipv6         = hcloud_primary_ip.webserver_primary_ipv6[count.index].id
+    ipv4         = hcloud_primary_ip.loadbalancer_primary_ipv4[count.index].id
+    ipv6         = hcloud_primary_ip.loadbalancer_primary_ipv6[count.index].id
   }
 
   firewall_ids = [
     hcloud_firewall.default_firewall.id,
-    hcloud_firewall.webserver_firewall.id
   ]
 
   placement_group_id = (count.index % 2 == 0 ? hcloud_placement_group.falkenstein-placement.id : hcloud_placement_group.nuernberg-placement.id)
 
   network {
     network_id = hcloud_network.javikweb_network.id
-    ip         = "10.10.20.${count.index + 1}"
+    ip         = "10.10.40.${count.index + 1}"
   }
 
   ssh_keys = concat(

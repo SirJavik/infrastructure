@@ -16,8 +16,8 @@ variable "server_count" {
     "ansible"       = 0
     "webserver"     = 2
     "mailserver"    = 1
-    "weblb"         = 1
-    "storageserver" = 2
+    "loadbalancer"  = 2
+    "storageserver" = 3
     "icinga"        = 1
   }
 }

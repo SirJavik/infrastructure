@@ -26,7 +26,7 @@ resource "hcloud_server" "storageserver" {
   )
 
   image       = "debian-12"
-  server_type = "cax11"
+  server_type = "cpx11"
   location    = (count.index % 2 == 0 ? "fsn1" : "nbg1")
 
   labels = {
