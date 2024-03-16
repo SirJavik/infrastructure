@@ -13,12 +13,11 @@ variable "server_count" {
   sensitive = false
 
   default = {
-    "ansible"       = 0
-    "webserver"     = 2
-    "mailserver"    = 1
-    "loadbalancer"  = 2
-    "storageserver" = 3
-    "icinga"        = 1
+    "ansible"      = 0
+    "webserver"    = 3
+    "mailserver"   = 1
+    "loadbalancer" = 2
+    "icinga"       = 1
   }
 }
 

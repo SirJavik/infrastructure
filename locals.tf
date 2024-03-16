@@ -10,10 +10,11 @@
 
 locals {
   server = merge(
-    { for server in hcloud_server.ansible : server.name => server.ipv4_address },
-    { for server in hcloud_server.mailserver : server.name => server.ipv4_address },
-    { for server in hcloud_server.webserver : server.name => server.ipv4_address },
-    { for server in hcloud_server.storageserver : server.name => server.ipv4_address }
+    { for server in hcloud_server.ansible : server.name => "${server.ipv4_address}, ${server.ipv6_address}" },
+    { for server in hcloud_server.mailserver : server.name => "${server.ipv4_address}, ${server.ipv6_address}" },
+    { for server in hcloud_server.webserver : server.name => "${server.ipv4_address}, ${server.ipv6_address}" },
+    { for server in hcloud_server.icinga : server.name => "${server.ipv4_address}, ${server.ipv6_address}" },
+    { for server in hcloud_server.loadbalancer : server.name => "${server.ipv4_address}, ${server.ipv6_address}" }
   )
 
   loadbalancer_ipv4 = (length(hcloud_floating_ip.loadbalancer_floating_v4) > 0 ? hcloud_floating_ip.loadbalancer_floating_v4[0].ip_address : hcloud_primary_ip.loadbalancer_primary_ipv4[0].ip_address)

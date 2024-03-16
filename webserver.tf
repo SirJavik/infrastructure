@@ -20,13 +20,13 @@ resource "hcloud_server" "webserver" {
   rebuild_protection = false
 
   name = format("%s-%s.%s",
-    "web${count.index + 1}",
+    "webstorage${count.index + 1}",
     (count.index % 2 == 0 ? "fsn1" : "nbg1"),
     "infra.sirjavik.de"
   )
 
   image       = "debian-12"
-  server_type = "cpx11"
+  server_type = "cpx21"
   location    = (count.index % 2 == 0 ? "fsn1" : "nbg1")
 
   labels = {
