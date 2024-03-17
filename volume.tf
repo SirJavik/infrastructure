@@ -16,7 +16,7 @@ resource "hcloud_volume" "webserver_database" {
   count             = var.server_count["webserver"]
   delete_protection = true
   name = format("%s-%s.%s-%s",
-    "web${count.index + 1}",
+    "webstorage${count.index + 1}",
     (count.index % 2 == 0 ? "fsn1" : "nbg1"),
     "infra.sirjavik.de",
     "DatabaseVolume"
@@ -37,7 +37,7 @@ resource "hcloud_volume" "webserver_webdata" {
   count             = var.server_count["webserver"]
   delete_protection = true
   name = format("%s-%s.%s-%s",
-    "web${count.index + 1}",
+    "webstorage${count.index + 1}",
     (count.index % 2 == 0 ? "fsn1" : "nbg1"),
     "infra.sirjavik.de",
     "WebdataVolume"
@@ -45,6 +45,16 @@ resource "hcloud_volume" "webserver_webdata" {
   location = (count.index % 2 == 0 ? "fsn1" : "nbg1")
   size     = 20
   format   = "ext4"
+
+  labels = {
+    terraform = true
+    ansible   = true
+    server = format("%s-%s.%s",
+      "webstorage${count.index + 1}",
+      (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+      "infra.sirjavik.de"
+    )
+  }
 }
 
 resource "hcloud_volume_attachment" "webserver_mount_webdata" {
@@ -58,7 +68,7 @@ resource "hcloud_volume" "webserver_graphite" {
   count             = var.server_count["webserver"]
   delete_protection = true
   name = format("%s-%s.%s-%s",
-    "web${count.index + 1}",
+    "webstorage${count.index + 1}",
     (count.index % 2 == 0 ? "fsn1" : "nbg1"),
     "infra.sirjavik.de",
     "GraphiteVolume"

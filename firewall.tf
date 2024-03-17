@@ -58,6 +58,17 @@ resource "hcloud_firewall" "webserver_firewall" {
     ]
     description = "HTTPS"
   }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "80"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+    description = "HTTP"
+  }
 }
 
 resource "hcloud_firewall" "mailserver_firewall" {
