@@ -43,6 +43,7 @@ resource "hcloud_server" "loadbalancer" {
 
   firewall_ids = [
     hcloud_firewall.default_firewall.id,
+    hcloud_firewall.webserver_firewall.id
   ]
 
   placement_group_id = (count.index % 2 == 0 ? hcloud_placement_group.falkenstein-placement.id : hcloud_placement_group.nuernberg-placement.id)
