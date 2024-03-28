@@ -23,7 +23,6 @@ resource "hcloud_volume" "webserver_database" {
   )
   location = (count.index % 2 == 0 ? "fsn1" : "nbg1")
   size     = 10
-  format   = "ext4"
 }
 
 resource "hcloud_volume_attachment" "webserver_mount_database" {
@@ -44,7 +43,6 @@ resource "hcloud_volume" "webserver_webdata" {
   )
   location = (count.index % 2 == 0 ? "fsn1" : "nbg1")
   size     = 20
-  format   = "ext4"
 
   labels = {
     terraform = true
@@ -75,12 +73,35 @@ resource "hcloud_volume" "webserver_graphite" {
   )
   location = (count.index % 2 == 0 ? "fsn1" : "nbg1")
   size     = 20
-  format   = "ext4"
 }
 
 resource "hcloud_volume_attachment" "webserver_mount_graphite" {
   count     = var.server_count["webserver"]
   volume_id = hcloud_volume.webserver_graphite[count.index].id
   server_id = hcloud_server.webserver[count.index].id
+  automount = false
+}
+
+####
+## Icinga
+####
+
+resource "hcloud_volume" "icinga_database" {
+  count             = var.server_count["icinga"]
+  delete_protection = true
+  name = format("%s-%s.%s-%s",
+    "icinga${count.index + 1}",
+    (count.index % 2 == 0 ? "fsn1" : "nbg1"),
+    "infra.sirjavik.de",
+    "DatabaseVolume"
+  )
+  location = (count.index % 2 == 0 ? "fsn1" : "nbg1")
+  size     = 10
+}
+
+resource "hcloud_volume_attachment" "icinga_mount_database" {
+  count     = var.server_count["icinga"]
+  volume_id = hcloud_volume.icinga_database[count.index].id
+  server_id = hcloud_server.icinga[count.index].id
   automount = false
 }
