@@ -39,17 +39,18 @@ resource "terraform_data" "init_setup" {
 }
 
 resource "terraform_data" "terraform_key" {
-  for_each = local.server
+  for_each = local.initServers
 
   triggers_replace = {
     private_key = tls_private_key.terraform_ssh.private_key_openssh
+    server_id   = each.value["id"]
   }
 
   connection {
     type        = "ssh"
     user        = "root"
     private_key = tls_private_key.terraform_ssh.private_key_openssh
-    host        = each.value
+    host        = each.value["ipv4"]
   }
 
   provisioner "file" {
