@@ -24,7 +24,7 @@ resource "terraform_data" "init_setup" {
     type        = "ssh"
     user        = "root"
     private_key = tls_private_key.terraform_ssh.private_key_openssh
-    host        = each.value
+    host        = each.value["ipv4"]
   }
 
   provisioner "remote-exec" {
