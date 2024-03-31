@@ -13,7 +13,7 @@ variable "server_count" {
   sensitive = false
 
   default = {
-    "ansible"      = 0
+    "wireguard"    = 1
     "webserver"    = 3
     "mailserver"   = 1
     "loadbalancer" = 2

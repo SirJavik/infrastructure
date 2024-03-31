@@ -82,6 +82,38 @@ resource "hcloud_firewall" "webserver_firewall" {
   }
 }
 
+resource "hcloud_firewall" "wireguard_firewall" {
+  name = "wireguard-firewall"
+
+  labels = {
+    service   = "firewall"
+    serviceOf = "wireguard"
+    terraform = true
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "443"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+    description = "HTTPS"
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "80"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+    description = "HTTP"
+  }
+}
+
 resource "hcloud_firewall" "mailserver_firewall" {
   name = "mailserver-firewall"
 

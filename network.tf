@@ -22,7 +22,7 @@ resource "hcloud_network" "javikweb_network" {
   }
 }
 
-resource "hcloud_network_subnet" "javikweb_network_ansible_subnet" {
+resource "hcloud_network_subnet" "javikweb_network_wireguard_subnet" {
   network_id   = hcloud_network.javikweb_network.id
   type         = "cloud"
   network_zone = "eu-central"
