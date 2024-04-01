@@ -17,7 +17,8 @@ resource "terraform_data" "init_setup" {
       "screen",
       "git",
       "sudo"
-    ]
+    ],
+    server_id   = each.value["id"]
   }
 
   connection {
