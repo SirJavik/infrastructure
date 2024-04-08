@@ -12,6 +12,23 @@
 ## Webserver
 ####
 
+/**
+ * This Terraform configuration defines a resource block for creating an Hetzner Cloud server (hcloud_server) for the webserver.
+ * It creates multiple instances of the server based on the value of the "server_count" variable.
+ * The server instances are created with the following properties:
+ *   - The server instances are named in the format "webstorageX.fsn1.infra.sirjavik.de" or "webstorageX.nbg1.infra.sirjavik.de", where X is the index of the instance.
+ *   - The server instances use the "debian-12" image and "cpx21" server type.
+ *   - The server instances are located in either "fsn1" or "nbg1" location based on the index.
+ *   - The server instances have IPv4 and IPv6 enabled and use the primary IP addresses obtained from the "hcloud_primary_ip" resource.
+ *   - The server instances are associated with the "webserver" service and have the "terraform" label.
+ *   - The server instances are protected from deletion and rebuild.
+ *   - The server instances are associated with the default firewall and the "webserver_firewall" firewall.
+ *   - The server instances are placed in the "falkenstein-placement" or "nuernberg-placement" placement group based on the index.
+ *   - The server instances are connected to the "javikweb_network" network and assigned IP addresses in the range "10.10.20.1" to "10.10.20.X", where X is the index.
+ *   - The server instances are authenticated using SSH keys obtained from the "data.hcloud_ssh_keys" and "hcloud_ssh_key" resources.
+ *   - The creation of the server instances depends on the availability of the "javikweb_network_webserver_subnet" subnet.
+ */
+
 resource "hcloud_server" "webserver" {
   count                    = var.server_count["webserver"]
   shutdown_before_deletion = true
@@ -61,5 +78,4 @@ resource "hcloud_server" "webserver" {
   depends_on = [
     hcloud_network_subnet.javikweb_network_webserver_subnet
   ]
-
 }
