@@ -17,16 +17,17 @@
 # Changelog: 
 # 1.0 - Initial version 
 
-resource "hcloud_server" "webstorage" {
+resource "hcloud_server" "vserver" {
   count = var.service_count
 
   name = (var.environment == "live" ? format("%s-%s.%s",
-    "webstorage${count.index + 1}",
+    "${var.name_prefix}${count.index + 1}",
     (count.index % 2 == 0 ? var.locations[0] : var.locations[1]),
-    var.domain
+    var.domain,
+
     ) : format("%s-%s-%s.%s",
     var.environment,
-    "webstorage${count.index + 1}",
+    "${var.name_prefix}${count.index + 1}",
     (count.index % 2 == 0 ? var.locations[0] : var.locations[1]),
     var.domain
   ))
@@ -37,8 +38,19 @@ resource "hcloud_server" "webstorage" {
   ssh_keys    = var.ssh_key_ids
   user_data   = file("${path.module}/cloud-init.yml")
 
-  labels = {
-    "environment" = var.environment,
-    "managed_by"  = "terraform"
+  public_net {
+    ipv4 = hcloud_primary_ip.ipv4[count.index].id
+    ipv6 = hcloud_primary_ip.ipv6[count.index].id
   }
+
+  network {
+    network_id = var.network_id
+    ip = "${substr(var.subnet, 0, length(var.subnet)-5)}.${(count.index + 1) * 10}"
+  }
+
+  labels = local.labels
+
+  depends_on = [ 
+    hcloud_network_subnet.vserver_subnet 
+  ]
 }

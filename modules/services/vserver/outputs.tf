@@ -8,7 +8,7 @@
 #                                    #
 ######################################
 
-# Filename: locals.tf
+# Filename: outputs.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
@@ -17,14 +17,11 @@
 # Changelog: 
 # 1.0 - Initial version 
 
-locals {
-  server = {
-    for server in hcloud_server.webstorage : server.name => {
-      id       = server.id
-      location = server.location
-      name     = server.name
-      ipv4     = server.ipv4_address
-      ipv6     = server.ipv6_address
-    }
-  }
+output "server" {
+  value = local.server
+}
+
+output "volumes" {
+  value = {
+    for volume in hcloud_volume.volume : volume.name => volume}
 }

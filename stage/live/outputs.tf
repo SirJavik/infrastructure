@@ -25,6 +25,10 @@ output "webstorage" {
   value = module.webstorage.server
 }
 
+output "webstorage_volumes" {
+  value = module.webstorage.volumes
+}
+
 output "network" {
   value = module.network.network
 }

@@ -70,9 +70,7 @@ module "loadbalancer" {
   environment   = module.globals.environment
   network_id    = module.network.network.id
 
-  targets = [ 
-    for server in module.webstorage.server : server.id
-   ]
+  targets_use_private_ip = true
 
   depends_on = [
     module.globals,
@@ -82,12 +80,66 @@ module "loadbalancer" {
 }
 
 module "webstorage" {
-  source        = "../../modules/services/webstorage"
+  source        = "../../modules/services/vserver"
   service_count = 3
   domain        = module.globals.domain
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
+
+  labels = {
+    "loadbalancer" = "lb",
+    "managed_by"   = "terraform"
+  }
+
+  volumes = {
+    "wwwdata" = {
+      size = 10
+    },
+    "mysqldata" = {
+      size = 10
+    }
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
+module "icinga" {
+  source        = "../../modules/services/vserver"
+  name_prefix   = "icinga"
+  service_count = 2
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.30.0/24" 
+
+  labels = {
+    "managed_by"   = "terraform"
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
+module "puppet" {
+  source        = "../../modules/services/vserver"
+  name_prefix   = "puppet"
+  service_count = 1
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.40.0/24" 
+
+  labels = {
+    "managed_by"   = "terraform"
+  }
 
   depends_on = [
     module.globals,

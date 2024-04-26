@@ -52,10 +52,14 @@ provider "acme" {
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
 
-
 module "globals" {
   source      = "../../modules/globals"
   environment = "pre"
+}
+
+module "network" {
+  source      = "../../modules/network"
+  environment = module.globals.environment
 }
 
 module "loadbalancer" {
@@ -64,4 +68,72 @@ module "loadbalancer" {
   service_count = 1
   domain        = module.globals.domain
   environment   = module.globals.environment
+  network_id    = module.network.network.id
+
+  targets_use_private_ip = true
+
+  depends_on = [
+    module.globals,
+    module.network,
+    module.webstorage
+  ]
+}
+
+module "webstorage" {
+  source        = "../../modules/services/vserver"
+  service_count = 3
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+
+  labels = {
+    "loadbalancer" = "lb",
+    "managed_by"   = "terraform"
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
+module "icinga" {
+  source        = "../../modules/services/vserver"
+  name_prefix   = "icinga"
+  service_count = 2
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.30.0/24" 
+
+  labels = {
+    "managed_by"   = "terraform"
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
+module "puppet" {
+  source        = "../../modules/services/vserver"
+  name_prefix   = "puppet"
+  service_count = 1
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.40.0/24" 
+
+  labels = {
+    "managed_by"   = "terraform"
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
 }

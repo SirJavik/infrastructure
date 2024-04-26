@@ -50,9 +50,16 @@ variable "network_id" {
   type        = number
 }
 
-variable "targets" {
-  description = "The targets of the load balancer"
-  type        = list(string)
+variable "targets_label_selector" {
+  description = "The label selector of the load balancer"
+  type        = string
+  default     = "loadbalancer=lb"
+}
+
+variable "targets_use_private_ip" {
+  description = "Use private IP for targets"
+  type        = bool
+  default     = false
 }
 
 variable "services" {
@@ -62,6 +69,8 @@ variable "services" {
     listen_port      = number
     destination_port = number
     protocol         = string
+    proxyprotocol    = optional(bool)
+
     health_check = optional(object({
       protocol = string
       port     = number
@@ -93,12 +102,27 @@ variable "services" {
       listen_port      = 80
       destination_port = 80
       protocol         = "http"
+      proxyprotocol    = true
 
       health_check = {
         protocol = "http"
         port     = 80
         interval = 5
         timeout  = 2
+
+        http = {
+          domain       = "example.com"
+          path         = "/"
+          response     = "OK"
+          tls          = true
+          status_codes = ["200"]
+        }
+      }
+
+      http = {
+        sticky_sessions = true
+        cookie_name     = "session"
+        cookie_lifetime = 3600
       }
     }
 
@@ -107,6 +131,13 @@ variable "services" {
       listen_port      = 443
       destination_port = 443
       protocol         = "tcp"
+
+      health_check = {
+        protocol = "tcp"
+        port     = 443
+        interval = 5
+        timeout  = 2
+      }
     }
 
     mysql = {
@@ -114,7 +145,19 @@ variable "services" {
       listen_port      = 3306
       destination_port = 3306
       protocol         = "tcp"
+
+      health_check = {
+        protocol = "tcp"
+        port     = 3306
+        interval = 10
+        timeout  = 5
+      }
     }
   }
+}
 
+variable "subnet" {
+  description = "The subnet of the load balancer"
+  type        = string
+  default     = "10.0.10.0/24"
 }

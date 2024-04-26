@@ -8,25 +8,18 @@
 #                                    #
 ######################################
 
-# Filename: locals.tf
+# Filename: networking.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
-# Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Date: 2024-04-26
+# Last Modified: 2024-04-26
 # Changelog: 
-# 1.0 - Initial version 
+# 1.0 - Initial version
 
-locals {
-  server = {
-    for server in hcloud_load_balancer.load_balancer : server.name => server
-  }
-
-  services_list = [
-    for service in var.services : service
-  ]
-
-  server_list = [
-    for server in local.server : server
-  ]
+resource "hcloud_network_subnet" "vserver_subnet" {
+  network_id   = var.network_id
+  type         = "cloud"
+  network_zone = "eu-central"
+  ip_range     = var.subnet
 }

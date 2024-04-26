@@ -21,11 +21,16 @@ resource "hcloud_network_subnet" "loadbalancer_subnet" {
   network_id   = var.network_id
   type         = "cloud"
   network_zone = "eu-central"
-  ip_range     = "10.0.10.0/24"
+  ip_range     = var.subnet
 }
 
 resource "hcloud_load_balancer_network" "loadbalancer_network" {
-  for_each         = local.server
-  load_balancer_id = each.value.id
+  count            = var.service_count
+  load_balancer_id = hcloud_load_balancer.load_balancer[count.index].id
   subnet_id        = hcloud_network_subnet.loadbalancer_subnet.id
+  ip               = "${substr(var.subnet, 0, length(var.subnet)-5)}.${(count.index + 1) * 10}"
+
+  depends_on = [ 
+    hcloud_network_subnet.loadbalancer_subnet
+  ]
 }

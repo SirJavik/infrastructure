@@ -17,37 +17,44 @@
 # Changelog: 
 # 1.0 - Initial version 
 
-resource "terraform_data" "loadbalancer_services" {
+resource "hcloud_load_balancer_service" "service" {
   count = length(var.services) * length(local.server)
 
-  triggers_replace = {
-    service_name             = "${local.services_list[count.index % length(local.services_list)].name}"
-    service_listen_port      = "${local.services_list[count.index % length(local.services_list)].listen_port}"
-    service_destination_port = "${local.services_list[count.index % length(local.services_list)].destination_port}"
-    service_protocol         = "${local.services_list[count.index % length(local.services_list)].protocol}"
+  load_balancer_id = local.server_list[count.index % length(local.server_list)].id
+  protocol         = local.services_list[count.index % length(local.services_list)].protocol
+  listen_port      = local.services_list[count.index % length(local.services_list)].listen_port
+  destination_port = local.services_list[count.index % length(local.services_list)].destination_port
 
-    service_hc_protocol = try("${local.services_list[count.index % length(local.services_list)].health_check.protocol}", "tcp")
-    service_hc_port     = try("${local.services_list[count.index % length(local.services_list)].health_check.port}", 80)
-    service_hc_interval = try("${local.services_list[count.index % length(local.services_list)].health_check.interval}", 20)
-    service_hc_timeout  = try("${local.services_list[count.index % length(local.services_list)].health_check.timeout}", 10)
+  dynamic "health_check" {
+    for_each = local.services_list[count.index % length(local.services_list)].health_check == null ? [] : [1]
+    content {
+      protocol = try("${local.services_list[count.index % length(local.services_list)].health_check.protocol}", "tcp")
+      port     = try("${local.services_list[count.index % length(local.services_list)].health_check.port}", 80)
+      timeout  = try("${local.services_list[count.index % length(local.services_list)].health_check.timeout}", 10)
+      interval = try("${local.services_list[count.index % length(local.services_list)].health_check.interval}", 20)
 
-    lb_name = "${local.server_list[count.index % length(local.server_list)].name}"
-    lb_id   = "${local.server_list[count.index % length(local.server_list)].id}"
+      dynamic "http" {
+        for_each = local.services_list[count.index % length(local.services_list)].health_check.http == null ? [] : [1]
+        content {
+          domain       = try("${local.services_list[count.index % length(local.services_list)].health_check.http.domain}", "")
+          path         = try("${local.services_list[count.index % length(local.services_list)].health_check.http.path}", "/")
+          response     = try("${local.services_list[count.index % length(local.services_list)].health_check.http.response}", "OK")
+          tls          = try("${local.services_list[count.index % length(local.services_list)].health_check.http.tls}", false)
+          status_codes = try("${local.services_list[count.index % length(local.services_list)].health_check.http.status_codes}", [200])
+        }
+      }
+    }
   }
-}
 
-resource "hcloud_load_balancer_service" "service" {
-  count = length(terraform_data.loadbalancer_services)
+  dynamic "http" {
+    for_each = local.services_list[count.index % length(local.services_list)].http == null ? [] : [1]
+    content {
+      sticky_sessions = try("${local.services_list[count.index % length(local.services_list)].http.sticky_sessions}", false)
+      cookie_name     = try("${local.services_list[count.index % length(local.services_list)].http.cookie_name}", "default")
+      cookie_lifetime = try("${local.services_list[count.index % length(local.services_list)].http.cookie_lifetime}", 30)
+      certificates    = try("${local.services_list[count.index % length(local.services_list)].http.certificates}", [])
+      redirect_http   = try("${local.services_list[count.index % length(local.services_list)].http.redirect_http}", false)
+    }
 
-  load_balancer_id = terraform_data.loadbalancer_services[count.index % length(local.server_list)].triggers_replace.lb_id
-  protocol         = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_protocol
-  listen_port      = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_listen_port
-  destination_port = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_destination_port
-
-  health_check {
-    protocol = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_hc_protocol
-    port     = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_hc_port
-    timeout  = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_hc_timeout
-    interval = terraform_data.loadbalancer_services[count.index % length(local.services_list)].triggers_replace.service_hc_interval
   }
 }

@@ -8,25 +8,25 @@
 #                                    #
 ######################################
 
-# Filename: locals.tf
+# Filename: rdns.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Last Modified: 2024-04-26
 # Changelog: 
 # 1.0 - Initial version 
 
-locals {
-  server = {
-    for server in hcloud_load_balancer.load_balancer : server.name => server
-  }
+resource "hcloud_rdns" "rdns_ipv4" {
+  for_each   = local.server
+  server_id  = each.value.id
+  ip_address = each.value.ipv4_address
+  dns_ptr    = each.value.name
+}
 
-  services_list = [
-    for service in var.services : service
-  ]
-
-  server_list = [
-    for server in local.server : server
-  ]
+resource "hcloud_rdns" "rdns_ipv6" {
+  for_each   = local.server
+  server_id  = each.value.id
+  ip_address = each.value.ipv6_address
+  dns_ptr    = each.value.name
 }
