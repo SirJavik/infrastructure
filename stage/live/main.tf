@@ -127,22 +127,20 @@ module "icinga" {
   ]
 }
 
-module "puppet" {
-  source        = "../../modules/services/vserver"
-  name_prefix   = "puppet"
-  service_count = 1
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.40.0/24" 
+module "dns" {
+  source        = "../../modules/dns"
 
-  labels = {
-    "managed_by"   = "terraform"
-  }
+  servers = merge(
+    module.loadbalancer.server, 
+    module.webstorage.server, 
+    module.icinga.server
+  )
 
   depends_on = [
     module.globals,
     module.network,
+    module.webstorage,
+    module.loadbalancer,
+    module.icinga
   ]
 }

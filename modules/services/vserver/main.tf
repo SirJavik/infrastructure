@@ -50,6 +50,8 @@ resource "hcloud_server" "vserver" {
 
   labels = local.labels
 
+  placement_group_id = hcloud_placement_group.placement_group.id
+
   depends_on = [ 
     hcloud_network_subnet.vserver_subnet 
   ]

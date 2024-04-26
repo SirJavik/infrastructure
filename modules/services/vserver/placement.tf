@@ -8,39 +8,17 @@
 #                                    #
 ######################################
 
-# Filename: outputs.tf
+# Filename: placement.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
-# Date: 2024-04-24
+# Date: 2024-04-25
 # Last Modified: 2024-04-25
 # Changelog: 
-# 1.0 - Initial version
+# 1.0 - Initial version 
 
-output "loadbalancer" {
-  value = module.loadbalancer.server
-}
-
-output "webstorage" {
-  value = module.webstorage.server
-}
-
-output "webstorage_volumes" {
-  value = module.webstorage.volumes
-}
-
-output "network" {
-  value = module.network.network
-}
-
-output "environment" {
-  value = module.globals.environment
-}
-
-output "dns_ipv4" {
-  value = module.dns.dns_ipv4
-}
-
-output "dns_ipv6" {
-  value = module.dns.dns_ipv6
+resource "hcloud_placement_group" "placement_group" {
+    name = "${var.name_prefix}-placement-group"
+    type = "spread"
+    labels = var.labels
 }

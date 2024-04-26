@@ -34,4 +34,6 @@ locals {
   ]
 
   labels = merge({ environment = var.environment }, var.labels)
+
+  module = basename(abspath(path.module))
 }

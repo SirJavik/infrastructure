@@ -8,23 +8,17 @@
 #                                    #
 ######################################
 
-# Filename: services.tf
+# Filename: locals.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
-# Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Date: 2024-04-26
+# Last Modified: 2024-04-26
 # Changelog: 
-# 1.0 - Initial version 
+# 1.0 - Initial version
 
-output "server" {
-  value = local.server
-}
-
-output "server_list" {
-  value = local.server_list
-}
-
-output "services_list" {
-  value = local.services_list
+locals {
+  domains = toset(distinct([
+    for domain in terraform_data.domain_parts : domain.triggers_replace.domain_with_tld
+  ]))
 }
