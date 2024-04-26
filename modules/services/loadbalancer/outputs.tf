@@ -8,10 +8,23 @@
 #                                    #
 ######################################
 
-output "user_keys" {
-  value = { for key in data.hcloud_ssh_keys.user_ssh_keys.ssh_keys : key.name => key.public_key }
-}
+# Filename: services.tf
+# Description: 
+# Version: 1.0
+# Author: Benjamin Schneider <ich@benjamin-schneider.com>
+# Date: 2024-04-25
+# Last Modified: 2024-04-25
+# Changelog: 
+# 1.0 - Initial version 
 
 output "server" {
   value = local.server
+}
+
+output "server_list" {
+  value = local.server
+}
+
+output "services_list" {
+  value = local.services_list
 }

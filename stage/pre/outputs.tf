@@ -8,22 +8,15 @@
 #                                    #
 ######################################
 
-####
-## Placement Groups
-####
+# Filename: outputs.tf
+# Description: 
+# Version: 1.0
+# Author: Benjamin Schneider <ich@benjamin-schneider.com>
+# Date: 2024-04-24
+# Last Modified: 2024-04-25
+# Changelog: 
+# 1.0 - Initial version
 
-resource "hcloud_placement_group" "falkenstein-placement" {
-  name = "falkenstein-placement"
-  type = "spread"
-  labels = {
-    location = "Falkenstein"
-  }
-}
-
-resource "hcloud_placement_group" "nuernberg-placement" {
-  name = "nuernberg-placement"
-  type = "spread"
-  labels = {
-    location = "Nuernberg"
-  }
+output "loadbalancer" {
+  value = module.loadbalancer.server
 }
