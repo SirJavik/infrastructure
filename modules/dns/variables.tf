@@ -43,3 +43,16 @@ variable "cloudflare_proxied_ttl" {
   type        = number
   default     = 1
 }
+
+variable "postmaster_email" {
+  description = "Email address for postmaster"
+  type        = string
+  default     = "admin@sirjavik.de"
+
+}
+
+variable "atproto" {
+  description = "Domains for bluesky"
+  type        = map(string)
+  default     = {}
+}

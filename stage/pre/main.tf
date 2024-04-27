@@ -106,10 +106,10 @@ module "icinga" {
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.30.0/24" 
+  subnet        = "10.0.30.0/24"
 
   labels = {
-    "managed_by"   = "terraform"
+    "managed_by" = "terraform"
   }
 
   depends_on = [
@@ -126,10 +126,10 @@ module "puppet" {
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.40.0/24" 
+  subnet        = "10.0.40.0/24"
 
   labels = {
-    "managed_by"   = "terraform"
+    "managed_by" = "terraform"
   }
 
   depends_on = [

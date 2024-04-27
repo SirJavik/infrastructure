@@ -23,5 +23,5 @@ output "server" {
 
 output "volumes" {
   value = {
-    for volume in hcloud_volume.volume : volume.name => volume}
+  for volume in hcloud_volume.volume : volume.name => volume }
 }

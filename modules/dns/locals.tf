@@ -23,6 +23,6 @@ locals {
   ]))
 
   loadbalancer_list = [
-    for key,value in var.loadbalancer : key
+    for key, value in var.loadbalancer : key
   ]
 }

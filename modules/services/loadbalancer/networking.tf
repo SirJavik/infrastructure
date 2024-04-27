@@ -28,9 +28,9 @@ resource "hcloud_load_balancer_network" "loadbalancer_network" {
   count            = var.service_count
   load_balancer_id = hcloud_load_balancer.load_balancer[count.index].id
   subnet_id        = hcloud_network_subnet.loadbalancer_subnet.id
-  ip               = "${substr(var.subnet, 0, length(var.subnet)-5)}.${(count.index + 1) * 10}"
+  ip               = "${substr(var.subnet, 0, length(var.subnet) - 5)}.${(count.index + 1) * 10}"
 
-  depends_on = [ 
+  depends_on = [
     hcloud_network_subnet.loadbalancer_subnet
   ]
 }

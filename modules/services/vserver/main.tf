@@ -45,14 +45,14 @@ resource "hcloud_server" "vserver" {
 
   network {
     network_id = var.network_id
-    ip = "${substr(var.subnet, 0, length(var.subnet)-5)}.${(count.index + 1) * 10}"
+    ip         = "${substr(var.subnet, 0, length(var.subnet) - 5)}.${(count.index + 1) * 10}"
   }
 
   labels = local.labels
 
   placement_group_id = hcloud_placement_group.placement_group.id
 
-  depends_on = [ 
-    hcloud_network_subnet.vserver_subnet 
+  depends_on = [
+    hcloud_network_subnet.vserver_subnet
   ]
 }

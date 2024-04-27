@@ -46,3 +46,8 @@ data "cloudflare_zone" "domain_zone" {
   for_each = toset(var.domains)
   name     = each.key
 }
+
+data "cloudflare_zone" "atproto_zone" {
+  for_each = var.atproto
+  name     = each.key
+}

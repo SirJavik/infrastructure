@@ -38,7 +38,7 @@ variable "domains" {
   description = "List of domains"
   type        = list(string)
 
-  default = [ 
+  default = [
     "benjamin-schneider.com",
     "sirjavik.de",
     "javik.net",

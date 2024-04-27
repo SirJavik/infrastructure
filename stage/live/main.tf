@@ -107,6 +107,33 @@ module "webstorage" {
   ]
 }
 
+module "mail" {
+  source        = "../../modules/services/vserver"#
+  name_prefix   = "mail"
+  service_count = 2
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.40.0/24"
+
+  labels = {
+    "loadbalancer" = "maillb",
+    "managed_by"   = "terraform"
+  }
+
+  volumes = {
+    "maildata" = {
+      size = 10
+    }
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
 module "icinga" {
   source        = "../../modules/services/vserver"
   name_prefix   = "icinga"
@@ -115,10 +142,10 @@ module "icinga" {
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.30.0/24" 
+  subnet        = "10.0.30.0/24"
 
   labels = {
-    "managed_by"   = "terraform"
+    "managed_by" = "terraform"
   }
 
   depends_on = [
@@ -128,12 +155,13 @@ module "icinga" {
 }
 
 module "dns" {
-  source        = "../../modules/dns"
+  source = "../../modules/dns"
 
   servers = merge(
-    module.loadbalancer.server, 
-    module.webstorage.server, 
-    module.icinga.server
+    module.loadbalancer.server,
+    module.webstorage.server,
+    module.icinga.server,
+    module.mail.server
   )
 
   domains = module.globals.domains
@@ -145,10 +173,15 @@ module "dns" {
     }
   }
 
+  atproto = {
+    "javik.rocks" = "did=did:plc:qe3p2rk7bswukxiwxbrjzwxn"
+  }
+
   depends_on = [
     module.globals,
     module.webstorage,
     module.loadbalancer,
-    module.icinga
+    module.icinga,
+    module.mail
   ]
 }

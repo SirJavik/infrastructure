@@ -26,6 +26,7 @@ resource "cloudflare_record" "ipv4_dns" {
   value   = try(lookup(each.value, "ipv4"), lookup(each.value, "ipv4_address"))
   type    = "A"
   ttl     = var.cloudflare_ttl
+  comment = "Managed by Terraform"
 }
 
 resource "cloudflare_record" "ipv6_dns" {
@@ -36,4 +37,5 @@ resource "cloudflare_record" "ipv6_dns" {
   value   = try(lookup(each.value, "ipv6"), lookup(each.value, "ipv6_address"))
   type    = "AAAA"
   ttl     = var.cloudflare_ttl
+  comment = "Managed by Terraform"
 }

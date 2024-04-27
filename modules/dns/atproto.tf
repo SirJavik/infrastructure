@@ -8,17 +8,22 @@
 #                                    #
 ######################################
 
-# Filename: placement.tf
+# Filename: atproto.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
-# Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Date: 2024-04-27
+# Last Modified: 2024-04-27
 # Changelog: 
-# 1.0 - Initial version 
+# 1.0 - Initial version
 
-resource "hcloud_placement_group" "placement_group" {
-  name   = "${var.name_prefix}-placement-group"
-  type   = "spread"
-  labels = var.labels
+resource "cloudflare_record" "atproto_txt" {
+  for_each = var.atproto
+
+  zone_id = data.cloudflare_zone.atproto_zone[each.key].id
+  name    = "_atproto.${each.key}"
+  value   = each.value
+  type    = "TXT"
+  ttl     = var.cloudflare_proxied_ttl
+  comment = "For Bluesky. Managed by Terraform"
 }
