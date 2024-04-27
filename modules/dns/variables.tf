@@ -18,5 +18,28 @@
 # 1.0 - Initial version
 
 variable "servers" {
+  description = "List of servers to create DNS records for"
+  type        = any
+}
 
+variable "domains" {
+  description = "List of domains to create DNS records for"
+  type        = list(string)
+}
+
+variable "loadbalancer" {
+  description = "List of loadbalancers names as cname for domains"
+  type        = map(map(string))
+}
+
+variable "cloudflare_ttl" {
+  description = "TTL for cloudflare records"
+  type        = number
+  default     = 3600
+}
+
+variable "cloudflare_proxied_ttl" {
+  description = "TTL for cloudflare records with proxy"
+  type        = number
+  default     = 1
 }

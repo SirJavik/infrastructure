@@ -21,19 +21,19 @@
 resource "cloudflare_record" "ipv4_dns" {
   for_each = var.servers
 
-  zone_id = data.cloudflare_zone.zone[terraform_data.domain_parts[each.key].triggers_replace.domain_with_tld].id
+  zone_id = data.cloudflare_zone.server_zone[terraform_data.domain_parts[each.key].triggers_replace.domain_with_tld].id
   name    = each.value.name
   value   = try(lookup(each.value, "ipv4"), lookup(each.value, "ipv4_address"))
   type    = "A"
-  ttl     = 3600
+  ttl     = var.cloudflare_ttl
 }
 
 resource "cloudflare_record" "ipv6_dns" {
   for_each = var.servers
 
-  zone_id = data.cloudflare_zone.zone[terraform_data.domain_parts[each.key].triggers_replace.domain_with_tld].id
+  zone_id = data.cloudflare_zone.server_zone[terraform_data.domain_parts[each.key].triggers_replace.domain_with_tld].id
   name    = each.value.name
   value   = try(lookup(each.value, "ipv6"), lookup(each.value, "ipv6_address"))
   type    = "AAAA"
-  ttl     = 3600
+  ttl     = var.cloudflare_ttl
 }

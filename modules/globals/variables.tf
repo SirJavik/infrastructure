@@ -33,3 +33,20 @@ variable "environment" {
   description = "The environment of the infrastructure"
   type        = string
 }
+
+variable "domains" {
+  description = "List of domains"
+  type        = list(string)
+
+  default = [ 
+    "benjamin-schneider.com",
+    "sirjavik.de",
+    "javik.net",
+    "javik.rocks",
+    "mondbasis24.de",
+    "undeadbrains.de",
+    "volunteering.solutions",
+    "volunteer.rocks",
+    "volunteers.events"
+  ]
+}

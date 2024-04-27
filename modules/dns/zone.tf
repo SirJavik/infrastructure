@@ -13,7 +13,7 @@
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-26
-# Last Modified: 2024-04-26
+# Last Modified: 2024-04-27
 # Changelog: 
 # 1.0 - Initial version
 
@@ -21,7 +21,7 @@ resource "terraform_data" "parts" {
   for_each = var.servers
 
   triggers_replace = {
-    parts           = split(".", each.value.name)
+    parts = split(".", each.value.name)
   }
 }
 
@@ -37,7 +37,12 @@ resource "terraform_data" "domain_parts" {
   }
 }
 
-data "cloudflare_zone" "zone" {
-  for_each = local.domains
+data "cloudflare_zone" "server_zone" {
+  for_each = local.server_domains
+  name     = each.key
+}
+
+data "cloudflare_zone" "domain_zone" {
+  for_each = toset(var.domains)
   name     = each.key
 }

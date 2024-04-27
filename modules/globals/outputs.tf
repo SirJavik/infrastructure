@@ -22,6 +22,11 @@ output "domain" {
   value       = var.domain
 }
 
+output "domains" {
+  description = "List of domains"
+  value       = var.domains
+}
+
 output "locations" {
   description = "The locations of the infrastructure"
   value       = var.locations
