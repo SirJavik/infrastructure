@@ -22,6 +22,10 @@ locals {
     for domain in terraform_data.domain_parts : domain.triggers_replace.domain_with_tld
   ]))
 
+  subdomains = toset(distinct([
+    for subdomain in terraform_data.subdomain_parts : subdomain.triggers_replace.domain_with_tld
+  ]))
+
   loadbalancer_list = [
     for key, value in var.loadbalancer : key
   ]

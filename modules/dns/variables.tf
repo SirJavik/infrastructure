@@ -25,6 +25,13 @@ variable "servers" {
 variable "domains" {
   description = "List of domains to create DNS records for"
   type        = list(string)
+  default     = []
+}
+
+variable "subdomains" {
+  description = "List of subdomains to create DNS records for"
+  type        = list(string)
+  default     = []
 }
 
 variable "loadbalancer" {

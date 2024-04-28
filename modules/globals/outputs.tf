@@ -42,3 +42,8 @@ output "ssh_key_ids" {
     hcloud_ssh_key.terraform.id
   ]
 }
+
+output "subdomains" {
+  description = "List of subdomains"
+  value       = var.subdomains
+}

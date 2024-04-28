@@ -108,7 +108,7 @@ module "webstorage" {
 }
 
 module "mail" {
-  source        = "../../modules/services/vserver"#
+  source        = "../../modules/services/vserver" #
   name_prefix   = "mail"
   service_count = 2
   domain        = module.globals.domain
@@ -164,7 +164,8 @@ module "dns" {
     module.mail.server
   )
 
-  domains = module.globals.domains
+  domains    = module.globals.domains
+  subdomains = module.globals.subdomains
 
   loadbalancer = {
     for server in module.loadbalancer.server : server.name => {

@@ -50,3 +50,20 @@ variable "domains" {
     "volunteers.events"
   ]
 }
+
+variable "subdomains" {
+  description = "List of subdomains"
+  type        = list(string)
+
+  default = [
+    "www.benjamin-schneider.com",
+    "www.sirjavik.de",
+    "www.javik.net",
+    "www.javik.rocks",
+    "www.mondbasis24.de",
+    "www.undeadbrains.de",
+    "www.volunteering.solutions",
+    "www.volunteer.rocks",
+    "www.volunteers.events"
+  ]
+}
