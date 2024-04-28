@@ -26,7 +26,7 @@ resource "cloudflare_record" "domain_ipv4" {
   type    = "A"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "A record for ${var.domains[count.index % length(var.domains)]}. Managed by Terraform."
 }
 
 resource "cloudflare_record" "domain_ipv6" {
@@ -38,7 +38,7 @@ resource "cloudflare_record" "domain_ipv6" {
   type    = "AAAA"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "AAAA record for ${var.domains[count.index % length(var.domains)]}. Managed by Terraform."
 }
 
 resource "cloudflare_record" "wildcard_domain_ipv4" {
@@ -50,7 +50,7 @@ resource "cloudflare_record" "wildcard_domain_ipv4" {
   type    = "A"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "A record for *.${var.domains[count.index % length(var.domains)]}. Managed by Terraform."
 }
 
 resource "cloudflare_record" "wildcard_domain_ipv6" {
@@ -62,6 +62,6 @@ resource "cloudflare_record" "wildcard_domain_ipv6" {
   type    = "AAAA"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "AAAA record for *.${var.domains[count.index % length(var.domains)]}. Managed by Terraform."
 }
 

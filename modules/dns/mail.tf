@@ -26,7 +26,7 @@ resource "cloudflare_record" "domain_mx" {
   type     = "MX"
   priority = 10
   ttl      = var.cloudflare_proxied_ttl
-  comment  = "MX record for ${var.domains[count.index]}, Managed by Terraform"
+  comment  = "MX record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "subdomain_mx" {
@@ -38,7 +38,7 @@ resource "cloudflare_record" "subdomain_mx" {
   type     = "MX"
   priority = 10
   ttl      = var.cloudflare_proxied_ttl
-  comment  = "MX record for ${var.domains[count.index]}, Managed by Terraform"
+  comment  = "MX record for ${var.subdomains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "wildcard_domain_mx" {
@@ -50,7 +50,7 @@ resource "cloudflare_record" "wildcard_domain_mx" {
   type     = "MX"
   priority = 10
   ttl      = var.cloudflare_proxied_ttl
-  comment  = "Wildcard MX record for ${var.domains[count.index]}, Managed by Terraform"
+  comment  = "Wildcard MX record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "domain_dmarc" {
@@ -61,7 +61,7 @@ resource "cloudflare_record" "domain_dmarc" {
   value   = "v=DMARC1; p=quarantine; rua=mailto:${var.postmaster_email}; ruf=mailto:${var.postmaster_email}; fo=1:d:s;"
   type    = "TXT"
   ttl     = var.cloudflare_proxied_ttl
-  comment = "DMARC record for ${var.domains[count.index]}, Managed by Terraform"
+  comment = "DMARC record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "domain_spf" {
@@ -72,7 +72,7 @@ resource "cloudflare_record" "domain_spf" {
   value   = "v=spf1 include:_spf.kasserver.com mx ?all"
   type    = "TXT"
   ttl     = var.cloudflare_proxied_ttl
-  comment = "SPF record for ${var.domains[count.index]}, Managed by Terraform"
+  comment = "SPF record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "domain_smtp" {
@@ -83,7 +83,7 @@ resource "cloudflare_record" "domain_smtp" {
   value   = "w01dd93a.kasserver.com" # For the moment until we migrate to own mailserver
   type    = "CNAME"
   ttl     = var.cloudflare_proxied_ttl
-  comment = "SMTP record for ${var.domains[count.index]}, Managed by Terraform"
+  comment = "SMTP record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "domain_imap" {
@@ -94,7 +94,7 @@ resource "cloudflare_record" "domain_imap" {
   value   = "w01dd93a.kasserver.com" # For the moment until we migrate to own mailserver
   type    = "CNAME"
   ttl     = var.cloudflare_proxied_ttl
-  comment = "IMAP record for ${var.domains[count.index]}, Managed by Terraform"
+  comment = "IMAP record for ${var.domains[count.index]}. Managed by Terraform"
 }
 
 resource "cloudflare_record" "domain_pop3" {
@@ -105,5 +105,5 @@ resource "cloudflare_record" "domain_pop3" {
   value   = "w01dd93a.kasserver.com" # For the moment until we migrate to own mailserver
   type    = "CNAME"
   ttl     = var.cloudflare_proxied_ttl
-  comment = "POP3 record for ${var.domains[count.index]}, Managed by Terraform"
+  comment = "POP3 record for ${var.domains[count.index]}. Managed by Terraform"
 }

@@ -26,7 +26,7 @@ resource "cloudflare_record" "subdomain_ipv4" {
   type    = "A"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "A record for ${var.subdomains[count.index % length(var.subdomains)]}. Managed by Terraform."
 }
 
 resource "cloudflare_record" "subdomain_ipv6" {
@@ -38,5 +38,5 @@ resource "cloudflare_record" "subdomain_ipv6" {
   type    = "AAAA"
   ttl     = var.cloudflare_proxied_ttl
   proxied = true
-  comment = "Managed by Terraform"
+  comment = "AAAA record for ${var.subdomains[count.index % length(var.subdomains)]}. Managed by Terraform."
 }
