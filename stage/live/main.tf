@@ -110,7 +110,7 @@ module "webstorage" {
 module "mail" {
   source        = "../../modules/services/vserver" #
   name_prefix   = "mail"
-  service_count = 2
+  service_count = 1
   domain        = module.globals.domain
   environment   = module.globals.environment
   network_id    = module.network.network.id

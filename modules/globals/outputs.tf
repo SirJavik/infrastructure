@@ -38,9 +38,10 @@ output "environment" {
 }
 
 output "ssh_key_ids" {
-  value = [
-    hcloud_ssh_key.terraform.id
-  ]
+  value = concat(
+    [hcloud_ssh_key.terraform.id],
+    data.hcloud_ssh_keys.keys_by_selector.ssh_keys[*].id
+  )
 }
 
 output "subdomains" {

@@ -30,3 +30,7 @@ resource "hcloud_ssh_key" "terraform" {
     "managed_by"  = "terraform"
   }
 }
+
+data "hcloud_ssh_keys" "keys_by_selector" {
+  with_selector = "use_in_terraform=true"
+}
