@@ -148,6 +148,12 @@ module "icinga" {
     "managed_by" = "terraform"
   }
 
+    volumes = {
+      "mysqldata" = {
+        size = 10
+      }
+    }
+
   depends_on = [
     module.globals,
     module.network,
