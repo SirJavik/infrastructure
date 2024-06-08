@@ -8,7 +8,7 @@
 #                                    #
 ######################################
 
-# Filename: locals.tf
+# Filename: ip.tf
 # Description: 
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>

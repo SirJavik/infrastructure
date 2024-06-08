@@ -17,30 +17,30 @@
 # Changelog: 
 # 1.0 - Initial version
 
-output "loadbalancer" {
-  value = module.loadbalancer.server
-}
+#output "loadbalancer" {
+#  value = module.loadbalancer.server
+#}
 
-output "webstorage" {
-  value = module.webstorage.server
-}
+#output "webstorage" {
+#  value = module.webstorage.server
+#}
 
-output "webstorage_volumes" {
-  value = module.webstorage.volumes
-}
+#output "webstorage_volumes" {
+#  value = module.webstorage.volumes
+#}
 
-output "network" {
-  value = module.network.network
-}
+#output "network" {
+#  value = module.network.network
+#}
 
-output "environment" {
-  value = module.globals.environment
-}
+#output "environment" {
+#  value = module.globals.environment
+#}
 
-output "dns_ipv4" {
-  value = module.dns.dns_ipv4
-}
+#output "dns_ipv4" {
+#  value = module.dns.dns_ipv4
+#}
 
-output "dns_ipv6" {
-  value = module.dns.dns_ipv6
-}
+#output "dns_ipv6" {
+#  value = module.dns.dns_ipv6
+#}

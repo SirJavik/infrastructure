@@ -148,11 +148,27 @@ module "icinga" {
     "managed_by" = "terraform"
   }
 
-    volumes = {
-      "mysqldata" = {
-        size = 10
-      }
+  volumes = {
+    "mysqldata" = {
+      size = 10
     }
+  }
+
+  floating_ips = {
+    "icingaweb_v4" = {
+      type        = "ipv4"
+      dns         = "icingaweb.sirjavik.de"
+      description = "Icinga Web"
+      location    = "fsn1"
+    },
+
+    "icingaweb_v6" = {
+      type        = "ipv6"
+      dns         = "icingaweb.sirjavik.de"
+      description = "Icinga Web"
+      location    = "fsn1"
+    }
+  }
 
   depends_on = [
     module.globals,

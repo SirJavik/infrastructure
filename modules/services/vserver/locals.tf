@@ -10,11 +10,13 @@
 
 # Filename: locals.tf
 # Description: 
-# Version: 1.0
+# Version: 1.2
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Last Modified: 2024-06-08
 # Changelog: 
+# 1.2 - Removed floating_ips variable
+# 1.1 - Added floating_ips variable
 # 1.0 - Initial version 
 
 locals {

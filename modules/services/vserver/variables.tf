@@ -13,8 +13,9 @@
 # Version: 1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Last Modified: 2024-06-08
 # Changelog: 
+# 1.1 - Added floating_ips variable
 # 1.0 - Initial version 
 
 variable "environment" {
@@ -88,6 +89,17 @@ variable "volumes" {
   description = "The volumes of the vserver"
   type = map(object({
     size = number
+  }))
+  default = {}
+}
+
+variable "floating_ips" {
+  description = "The floating IPs of the vserver"
+  type = map(object({
+    type        = string
+    dns         = string
+    description = string
+    location    = string
   }))
   default = {}
 }
