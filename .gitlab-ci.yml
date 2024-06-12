@@ -10,15 +10,15 @@
 
 # Using version `0.10.0`:
 include:
-  - component: gitlab.com/components/opentofu/validate-plan-apply@0.10.0
+  - component: gitlab.com/components/opentofu/validate-plan-apply@0.21.0
     inputs:
       # The version must currently be specified explicitly as an input,
       # to find the correctly associated images. # This can be removed
       # once https://gitlab.com/gitlab-org/gitlab/-/issues/438275 is solved.
-      version: 0.10.0
-      opentofu_version: 1.6.1
+      version: 0.21.0
+      opentofu_version: 1.7.1
       state_name: $TF_STATE_NAME
-      auto_apply: $TF_AUTO_APPLY
-      root_dir: stages/live/
+      auto_apply: true
+      root_dir: './stages/live'
 
 stages: [validate, build, deploy]
