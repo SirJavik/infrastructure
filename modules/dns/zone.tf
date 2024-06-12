@@ -10,20 +10,13 @@
 
 # Filename: zone.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-26
-# Last Modified: 2024-04-27
+# Last Modified: 2024-06-12
 # Changelog: 
+# 1.1 - Added terraform_data.atproto_domain_parts
 # 1.0 - Initial version
-
-resource "terraform_data" "parts" {
-  for_each = var.servers
-
-  triggers_replace = {
-    parts = split(".", each.value.name)
-  }
-}
 
 resource "terraform_data" "subparts" {
   for_each = toset(var.subdomains)
@@ -33,16 +26,11 @@ resource "terraform_data" "subparts" {
   }
 }
 
-
-resource "terraform_data" "domain_parts" {
-  for_each = var.servers
+resource "terraform_data" "protoparts" {
+  for_each = var.atproto
 
   triggers_replace = {
-    tld             = try(element(terraform_data.parts[each.key].triggers_replace.parts, length(terraform_data.parts[each.key].triggers_replace.parts) - 1), null)
-    domain          = try(element(terraform_data.parts[each.key].triggers_replace.parts, length(terraform_data.parts[each.key].triggers_replace.parts) - 2), null)
-    subdomain       = try(element(terraform_data.parts[each.key].triggers_replace.parts, length(terraform_data.parts[each.key].triggers_replace.parts) - 3), null)
-    host            = try(element(terraform_data.parts[each.key].triggers_replace.parts, 0), null)
-    domain_with_tld = try(join(".", [element(terraform_data.parts[each.key].triggers_replace.parts, length(terraform_data.parts[each.key].triggers_replace.parts) - 2), element(terraform_data.parts[each.key].triggers_replace.parts, length(terraform_data.parts[each.key].triggers_replace.parts) - 1)]), null)
+    parts   = split(".", each.key)
   }
 }
 
@@ -57,9 +45,17 @@ resource "terraform_data" "subdomain_parts" {
   }
 }
 
-data "cloudflare_zone" "server_zone" {
-  for_each = local.server_domains
-  name     = each.key
+resource "terraform_data" "atproto_domain_parts" {
+  for_each = var.atproto
+
+  triggers_replace = {
+    payload         = each.value
+    fulldomain      = each.key
+    tld             = try(element(terraform_data.protoparts[each.key].triggers_replace.parts, length(terraform_data.protoparts[each.key].triggers_replace.parts) - 1), null)
+    domain          = try(element(terraform_data.protoparts[each.key].triggers_replace.parts, length(terraform_data.protoparts[each.key].triggers_replace.parts) - 2), null)
+    subdomain       = try(element(terraform_data.protoparts[each.key].triggers_replace.parts, length(terraform_data.protoparts[each.key].triggers_replace.parts) - 3), null)
+    domain_with_tld = try(join(".", [element(terraform_data.protoparts[each.key].triggers_replace.parts, length(terraform_data.protoparts[each.key].triggers_replace.parts) - 2), element(terraform_data.protoparts[each.key].triggers_replace.parts, length(terraform_data.protoparts[each.key].triggers_replace.parts) - 1)]), null)
+  }
 }
 
 data "cloudflare_zone" "domain_zone" {
@@ -73,6 +69,6 @@ data "cloudflare_zone" "subdomain_zone" {
 }
 
 data "cloudflare_zone" "atproto_zone" {
-  for_each = var.atproto
-  name     = each.key
+  for_each = terraform_data.atproto_domain_parts
+  name     = each.value.triggers_replace.domain_with_tld
 }

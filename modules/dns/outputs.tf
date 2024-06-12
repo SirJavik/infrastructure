@@ -17,10 +17,3 @@
 # Changelog: 
 # 1.0 - Initial version
 
-output "dns_ipv4" {
-  value = cloudflare_record.ipv4_dns
-}
-
-output "dns_ipv6" {
-  value = cloudflare_record.ipv6_dns
-}

@@ -18,10 +18,6 @@
 # 1.0 - Initial version
 
 locals {
-  server_domains = toset(distinct([
-    for domain in terraform_data.domain_parts : domain.triggers_replace.domain_with_tld
-  ]))
-
   subdomains = toset(distinct([
     for subdomain in terraform_data.subdomain_parts : subdomain.triggers_replace.domain_with_tld
   ]))

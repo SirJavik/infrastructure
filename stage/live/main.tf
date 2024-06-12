@@ -10,11 +10,12 @@
 
 # Filename: main.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-24
-# Last Modified: 2024-04-27
+# Last Modified: 2024-06-12
 # Changelog: 
+# 1.1 - Support for floating ip multi dns
 # 1.0 - Initial version
 
 terraform {
@@ -157,14 +158,22 @@ module "icinga" {
   floating_ips = {
     "icingaweb_v4" = {
       type        = "ipv4"
-      dns         = "icingaweb.sirjavik.de"
+      dns         = [
+        "icingaweb.sirjavik.de",
+        "icinga.sirjavik.de",
+        "monitoring.sirjavik.de"
+      ]
       description = "Icinga Web"
       location    = "fsn1"
     },
 
     "icingaweb_v6" = {
       type        = "ipv6"
-      dns         = "icingaweb.sirjavik.de"
+      dns         = [
+        "icingaweb.sirjavik.de",
+        "icinga.sirjavik.de",
+        "monitoring.sirjavik.de"
+      ]
       description = "Icinga Web"
       location    = "fsn1"
     }
@@ -179,13 +188,6 @@ module "icinga" {
 module "dns" {
   source = "../../modules/dns"
 
-  servers = merge(
-    module.loadbalancer.server,
-    module.webstorage.server,
-    module.icinga.server,
-    module.mail.server
-  )
-
   domains    = module.globals.domains
   subdomains = module.globals.subdomains
 
@@ -197,7 +199,9 @@ module "dns" {
   }
 
   atproto = {
-    "javik.rocks" = "did=did:plc:qe3p2rk7bswukxiwxbrjzwxn"
+    "javik.rocks"     = "did=did:plc:qe3p2rk7bswukxiwxbrjzwxn",
+    "dev.javik.rocks" = "did=did:plc:6ar6r5waxzs2xykii5gh6zbo",
+    "javik.net"       = "did=did:plc:k3ltdspf7njfzg6um25uvvly"
   }
 
   depends_on = [

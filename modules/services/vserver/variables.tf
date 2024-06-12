@@ -10,11 +10,12 @@
 
 # Filename: variables.tf
 # Description: 
-# Version: 1.0
+# Version: 1.2
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-06-08
+# Last Modified: 2024-06-12
 # Changelog: 
+# 1.2 - Changed dns in floating_ip to list
 # 1.1 - Added floating_ips variable
 # 1.0 - Initial version 
 
@@ -97,9 +98,21 @@ variable "floating_ips" {
   description = "The floating IPs of the vserver"
   type = map(object({
     type        = string
-    dns         = string
+    dns         = list(string)
     description = string
     location    = string
   }))
   default = {}
+}
+
+variable "cloudflare_ttl" {
+  description = "TTL for cloudflare records"
+  type        = number
+  default     = 3600
+}
+
+variable "cloudflare_proxied_ttl" {
+  description = "TTL for cloudflare records with proxy"
+  type        = number
+  default     = 1
 }

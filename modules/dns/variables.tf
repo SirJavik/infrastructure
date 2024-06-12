@@ -17,11 +17,6 @@
 # Changelog: 
 # 1.0 - Initial version
 
-variable "servers" {
-  description = "List of servers to create DNS records for"
-  type        = any
-}
-
 variable "domains" {
   description = "List of domains to create DNS records for"
   type        = list(string)

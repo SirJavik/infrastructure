@@ -10,19 +10,19 @@
 
 # Filename: atproto.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-27
-# Last Modified: 2024-04-27
+# Last Modified: 2024-06-12
 # Changelog: 
 # 1.0 - Initial version
 
 resource "cloudflare_record" "atproto_txt" {
-  for_each = var.atproto
+  for_each = terraform_data.atproto_domain_parts
 
   zone_id = data.cloudflare_zone.atproto_zone[each.key].id
-  name    = "_atproto.${each.key}"
-  value   = each.value
+  name    = format("_atproto.%s", each.value.triggers_replace.fulldomain)
+  value   = each.value.triggers_replace.payload
   type    = "TXT"
   ttl     = var.cloudflare_proxied_ttl
   comment = "For Bluesky. Managed by Terraform"
