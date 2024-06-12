@@ -17,8 +17,8 @@ include:
       # once https://gitlab.com/gitlab-org/gitlab/-/issues/438275 is solved.
       version: 0.21.0
       opentofu_version: 1.7.1
-      state_name: $TF_STATE_NAME
+      state_name: test
       auto_apply: true
-      root_dir: './stages/live'
+      root_dir: './stages/test'
 
 stages: [validate, build, deploy]

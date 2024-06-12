@@ -10,11 +10,12 @@
 
 # Filename: main.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-24
-# Last Modified: 2024-04-25
+# Last Modified: 2024-06-12
 # Changelog: 
+# 1.1 - Support for floating ip multi dns
 # 1.0 - Initial version
 
 terraform {
@@ -92,6 +93,42 @@ module "webstorage" {
     "managed_by"   = "terraform"
   }
 
+  volumes = {
+    "wwwdata" = {
+      size = 10
+    },
+    "mysqldata" = {
+      size = 10
+    }
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
+module "mail" {
+  source        = "../../modules/services/vserver" #
+  name_prefix   = "mail"
+  service_count = 1
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.40.0/24"
+
+  labels = {
+    "loadbalancer" = "maillb",
+    "managed_by"   = "terraform"
+  }
+
+  volumes = {
+    "maildata" = {
+      size = 10
+    }
+  }
+
   depends_on = [
     module.globals,
     module.network,
@@ -112,24 +149,34 @@ module "icinga" {
     "managed_by" = "terraform"
   }
 
-  depends_on = [
-    module.globals,
-    module.network,
-  ]
-}
+  volumes = {
+    "mysqldata" = {
+      size = 10
+    }
+  }
 
-module "puppet" {
-  source        = "../../modules/services/vserver"
-  name_prefix   = "puppet"
-  service_count = 2
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.40.0/24"
+  floating_ips = {
+    "icingaweb_v4" = {
+      type        = "ipv4"
+      dns         = [
+        "test-icingaweb.sirjavik.de",
+        "test-icinga.sirjavik.de",
+        "test-monitoring.sirjavik.de"
+      ]
+      description = "Icinga Web"
+      location    = "fsn1"
+    },
 
-  labels = {
-    "managed_by" = "terraform"
+    "icingaweb_v6" = {
+      type        = "ipv6"
+      dns         = [
+        "test-icingaweb.sirjavik.de",
+        "test-icinga.sirjavik.de",
+        "test-monitoring.sirjavik.de"
+      ]
+      description = "Icinga Web"
+      location    = "fsn1"
+    }
   }
 
   depends_on = [
@@ -137,3 +184,25 @@ module "puppet" {
     module.network,
   ]
 }
+
+#module "dns" {
+#  source = "../../modules/dns"
+#
+#  domains    = module.globals.domains
+#  subdomains = module.globals.subdomains
+#
+#  loadbalancer = {
+#    for server in module.loadbalancer.server : server.name => {
+#      ipv4 = server.ipv4
+#      ipv6 = server.ipv6
+#    }
+#  }
+#
+#  depends_on = [
+#    module.globals,
+#    module.webstorage,
+#    module.loadbalancer,
+#    module.icinga,
+#    module.mail
+#  ]
+#}
