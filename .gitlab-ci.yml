@@ -19,6 +19,6 @@ include:
       opentofu_version: 1.7.1
       state_name: test
       auto_apply: true
-      root_dir: './stages/test'
+      root_dir: stages/test
 
 stages: [validate, build, deploy]
