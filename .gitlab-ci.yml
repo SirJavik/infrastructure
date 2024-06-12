@@ -20,5 +20,4 @@ include:
       state_name: test
       auto_apply: true
       root_dir: stage/test
-
 stages: [validate, build, deploy]
