@@ -48,6 +48,10 @@ resource "hcloud_server" "vserver" {
     ip         = "${substr(var.subnet, 0, length(var.subnet) - 5)}.${(count.index + 1) * 10}"
   }
 
+  firewall_ids = [
+    hcloud_firewall.firewall.id
+  ]
+
   labels = local.labels
 
   placement_group_id = hcloud_placement_group.placement_group.id

@@ -31,7 +31,7 @@ resource "terraform_data" "protoparts" {
   for_each = var.atproto
 
   triggers_replace = {
-    parts   = split(".", each.key)
+    parts = split(".", each.key)
   }
 }
 
@@ -39,7 +39,7 @@ resource "terraform_data" "dkimparts" {
   for_each = var.dkim
 
   triggers_replace = {
-    parts   = split(".", each.key)
+    parts = split(".", each.key)
   }
 }
 

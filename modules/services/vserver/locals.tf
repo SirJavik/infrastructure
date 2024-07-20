@@ -48,7 +48,7 @@ locals {
   module = basename(abspath(path.module))
 
   floating_ip_dns = distinct(flatten(tolist([
-    for floating_ip in var.floating_ips : [ for dns in floating_ip.dns : dns ]
+    for floating_ip in var.floating_ips : [for dns in floating_ip.dns : dns]
   ])))
 
   hcloud_floating_ip = flatten(tolist([
