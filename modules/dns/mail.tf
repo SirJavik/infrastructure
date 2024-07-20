@@ -10,12 +10,14 @@
 
 # Filename: mail.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-27
-# Last Modified: 2024-04-28
+# Last Modified: 2024-07-20
 # Changelog: 
-# 1.0 - Initial version
+# 1.1.0 - DKIM Support
+# 1.0.1 - Better SPF record
+# 1.0.0 - Initial version
 
 # Mailserver: w01c0755.kasserver.com
 
@@ -71,7 +73,7 @@ resource "cloudflare_record" "domain_spf" {
 
   zone_id = data.cloudflare_zone.domain_zone[var.domains[count.index]].id
   name    = var.domains[count.index]
-  value   = "v=spf1 include:_spf.kasserver.com mx ?all"
+  value   = "v=spf1 mx a ?all"
   type    = "TXT"
   ttl     = var.cloudflare_proxied_ttl
   comment = "SPF record for ${var.domains[count.index]}. Managed by Terraform"
@@ -109,3 +111,15 @@ resource "cloudflare_record" "domain_pop3" {
   ttl     = var.cloudflare_proxied_ttl
   comment = "POP3 record for ${var.domains[count.index]}. Managed by Terraform"
 }
+
+resource "cloudflare_record" "domain_dkim" {
+  for_each = terraform_data.dkim_domain_parts
+
+  zone_id = data.cloudflare_zone.dkim_zone[each.key].id
+  name    = format("key._domainkey.%s", each.value.triggers_replace.fulldomain)
+  value   = each.value.triggers_replace.payload
+  type    = "TXT"
+  ttl     = var.cloudflare_ttl
+  comment = "For Bluesky. Managed by Terraform"
+}
+

@@ -10,12 +10,13 @@
 
 # Filename: variables.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-26
-# Last Modified: 2024-04-26
+# Last Modified: 2024-07-20
 # Changelog: 
-# 1.0 - Initial version
+# 1.1.0 - Add dkim support
+# 1.0.0 - Initial version
 
 variable "domains" {
   description = "List of domains to create DNS records for"
@@ -55,6 +56,12 @@ variable "postmaster_email" {
 
 variable "atproto" {
   description = "Domains for bluesky"
+  type        = map(string)
+  default     = {}
+}
+
+variable "dkim" {
+  description = "DKIM keys for domains"
   type        = map(string)
   default     = {}
 }
