@@ -32,6 +32,8 @@ resource "hcloud_server" "vserver" {
     var.domain
   ))
 
+  keep_disk    = true
+
   image       = var.image
   server_type = var.type
   location    = (count.index % 2 == 0 ? var.locations[0] : var.locations[1])

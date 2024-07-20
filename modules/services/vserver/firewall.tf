@@ -18,7 +18,7 @@
 # 1.0.0 - Initial version
 
 resource "hcloud_firewall" "firewall" {
-  name   = "${var.firewall_name}-firewall"
+  name   = "${var.name_prefix}-firewall"
   labels = local.labels
 
   dynamic "rule" {

@@ -117,12 +117,6 @@ variable "cloudflare_proxied_ttl" {
   default     = 1
 }
 
-variable "firewall_name" {
-  description = "The name of the firewall"
-  type        = string
-  default     = "default"
-}
-
 variable "firewall_rules" {
   description = "The firewall rules of the vserver"
   type = list(object({

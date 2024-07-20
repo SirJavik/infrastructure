@@ -95,7 +95,6 @@ module "webstorage" {
     "managed_by"   = "terraform"
   }
 
-  firewall_name = "webstorage"
   firewall_rules = [
     {
       direction   = "in"
@@ -153,13 +152,13 @@ module "mail" {
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
   subnet        = "10.0.40.0/24"
+  type          = "cx21"
 
   labels = {
     "loadbalancer" = "maillb",
     "managed_by"   = "terraform"
   }
 
-  firewall_name = "mail"
   firewall_rules = [
     {
       direction   = "in"
@@ -299,7 +298,6 @@ module "icinga" {
     "managed_by" = "terraform"
   }
 
-  firewall_name = "icinga"
   firewall_rules = [
     {
       direction   = "in"
