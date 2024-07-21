@@ -87,6 +87,7 @@ module "loadbalancer" {
 module "volunteersystem" {
   source        = "./modules/services/vserver"
   service_count = 1
+  name_prefix   = "volunteersystem" 
   domain        = module.globals.domain
   environment   = module.globals.environment
   network_id    = module.network.network.id
