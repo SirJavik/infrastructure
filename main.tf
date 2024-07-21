@@ -87,11 +87,12 @@ module "loadbalancer" {
 module "volunteersystem" {
   source        = "./modules/services/vserver"
   service_count = 1
-  name_prefix   = "volunteersystem" 
+  name_prefix   = "volunteersystem"
   domain        = module.globals.domain
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.50.0/24"
 
   labels = {
     "managed_by" = "terraform"
