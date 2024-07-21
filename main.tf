@@ -98,6 +98,12 @@ module "volunteersystem" {
     "managed_by" = "terraform"
   }
 
+  additional_names = [ 
+    "demo.volunteers.events",
+    "demo.volunteer.rocks",
+    "demo.volunteering.solutions",
+   ]
+
   firewall_rules = [
     {
       direction   = "in"
@@ -124,6 +130,16 @@ module "volunteersystem" {
       protocol    = "tcp"
       port        = "443"
       description = "HTTPS"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
+      protocol    = "udp"
+      port        = "60000-61000"
+      description = "Mosh"
       source_ips = [
         "0.0.0.0/0",
         "::/0"
@@ -185,6 +201,16 @@ module "webstorage" {
       protocol    = "tcp"
       port        = "443"
       description = "HTTPS"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
+      protocol    = "udp"
+      port        = "60000-61000"
+      description = "Mosh"
       source_ips = [
         "0.0.0.0/0",
         "::/0"
@@ -329,6 +355,16 @@ module "mail" {
       protocol    = "tcp"
       port        = "443"
       description = "HTTPS"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
+      protocol    = "udp"
+      port        = "60000-61000"
+      description = "Mosh"
       source_ips = [
         "0.0.0.0/0",
         "::/0"
