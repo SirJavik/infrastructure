@@ -51,19 +51,10 @@ resource "hcloud_rdns" "floating_ip_rdns" {
 ###     DNS     ###
 ###################
 
-data "cloudflare_zone" "floating_ip_dns_zone" {
-  count = length(var.floating_ips) * length(local.floating_ip_dns)
-
-  name = format("%s.%s",
-    element(split(".", local.floating_ip_list[count.index % length(local.floating_ip_list)].dns[count.index % length(local.floating_ip_dns)]), length(split(".", local.floating_ip_list[count.index % length(local.floating_ip_list)].dns[count.index % length(local.floating_ip_dns)])) - 2),
-    element(split(".", local.floating_ip_list[count.index % length(local.floating_ip_list)].dns[count.index % length(local.floating_ip_dns)]), length(split(".", local.floating_ip_list[count.index % length(local.floating_ip_list)].dns[count.index % length(local.floating_ip_dns)])) - 1)
-  )
-}
-
 resource "cloudflare_record" "floating_ip_dns" {
   count = length(local.floating_ip_list) * length(local.floating_ip_dns)
 
-  zone_id = data.cloudflare_zone.floating_ip_dns_zone[count.index % length(local.floating_ip_list)].id
+  zone_id = local.cloudflare_zone_list[count.index % length(local.floating_ip_dns)]
   name    = local.floating_ip_list[count.index % length(local.floating_ip_list)].dns[count.index % length(local.floating_ip_dns)]
   value   = (local.floating_ip_list[count.index % length(local.floating_ip_list)].type == "ipv4" ? local.hcloud_floating_ip[count.index % length(local.floating_ip_list)].ip_address : "${local.hcloud_floating_ip[count.index % length(local.floating_ip_list)].ip_address}1")
   type    = (local.floating_ip_list[count.index % length(local.floating_ip_list)].type == "ipv4" ? "A" : "AAAA")

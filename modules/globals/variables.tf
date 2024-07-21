@@ -10,12 +10,13 @@
 
 # Filename: variables.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Last Modified: 2024-07-20
 # Changelog: 
-# 1.0 - Initial version 
+# 1.1.0 - Add cloudflare_zones
+# 1.0.0 - Initial version 
 
 variable "domain" {
   description = "The domain of the infrastructure"
@@ -66,4 +67,20 @@ variable "subdomains" {
     "www.volunteer.rocks",
     "www.volunteers.events"
   ]
+}
+
+variable "cloudflare_zones" {
+  description = "The Cloudflare zones to use for the network"
+  type        = map(string)
+  default = {
+    "benjamin-schneider.com" = "8b369cb9262cc7f1aaeeef4af6fe5cbf",
+    "javik.rocks"            = "8abb36e2012f6b133d76df6cf87b7753",
+    "sirjavik.de"            = "d1ad53d186c62b1c21c7c7572efd8c0f",
+    "volunteering.solutions" = "517f6a049ccac5b28896ee4f3975e057",
+    "volunteers.events"      = "2dc7a7e9b010b94cf8c0698fc0433717",
+    "volunteer.rocks"        = "d8663feb3dd23536c29c7254445e9d19",
+    "javik.net"              = "2fc554c6e2f1b0b436dfe108aab4391a",
+    "mondbasis24.de"         = "54ede00ad9117a57c27bb69eed67b4de",
+    "undeadbrains.de"        = "a0c43658e705798318f5248a9f3e1177"
+  }
 }

@@ -10,12 +10,13 @@
 
 # Filename: outputs.tf
 # Description: 
-# Version: 1.0
+# Version: 1.1.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Last Modified: 2024-07-20
 # Changelog: 
-# 1.0 - Initial version 
+# 1.1.0 - Add cloudflare_zones
+# 1.0.0 - Initial version 
 
 output "domain" {
   description = "The domain of the infrastructure"
@@ -47,4 +48,9 @@ output "ssh_key_ids" {
 output "subdomains" {
   description = "List of subdomains"
   value       = var.subdomains
+}
+
+output "cloudflare_zones" {
+  description = "The Cloudflare zones to use for the infrastructure"
+  value       = var.cloudflare_zones
 }

@@ -63,4 +63,8 @@ locals {
       location    = floating_ip.location
     }
   ]
+
+  cloudflare_zone_list = [
+    for zone in var.cloudflare_zones : zone
+  ]
 }

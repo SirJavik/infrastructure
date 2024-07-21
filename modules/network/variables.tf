@@ -10,12 +10,12 @@
 
 # Filename: variables.tf
 # Description: 
-# Version: 1.0
+# Version: 1.0.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-24
-# Last Modified: 2024-04-25
+# Last Modified: 2024-07-20
 # Changelog: 
-# 1.0 - Initial version
+# 1.0.0 - Initial version
 
 variable "name" {
   type        = string

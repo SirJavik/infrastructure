@@ -49,7 +49,7 @@ variable "image" {
 variable "type" {
   description = "The server type to use for the vserver"
   type        = string
-  default     = "cx11"
+  default     = "cx22"
 }
 
 variable "locations" {
@@ -127,4 +127,16 @@ variable "firewall_rules" {
     description = string
   }))
   default = []
+}
+
+variable "additional_names" {
+  description = "Additional names for the vserver"
+  type        = list(string)
+  default     = []
+}
+
+variable "cloudflare_zones" {
+  description = "The Cloudflare zones to use for the vserver"
+  type        = map(string)
+  default     = {}
 }

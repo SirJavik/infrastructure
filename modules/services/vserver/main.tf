@@ -32,7 +32,7 @@ resource "hcloud_server" "vserver" {
     var.domain
   ))
 
-  keep_disk    = true
+  keep_disk = true
 
   image       = var.image
   server_type = var.type
