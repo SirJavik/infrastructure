@@ -58,17 +58,17 @@ provider "acme" {
 }
 
 module "globals" {
-  source      = "../../modules/globals"
+  source      = "./modules/globals"
   environment = "live"
 }
 
 module "network" {
-  source      = "../../modules/network"
+  source      = "./modules/network"
   environment = module.globals.environment
 }
 
 module "loadbalancer" {
-  source        = "../../modules/services/loadbalancer"
+  source        = "./modules/services/loadbalancer"
   type          = "lb11"
   service_count = 1
   domain        = module.globals.domain
@@ -85,7 +85,7 @@ module "loadbalancer" {
 }
 
 module "volunteersystem" {
-  source        = "../../modules/services/vserver"
+  source        = "./modules/services/vserver"
   service_count = 1
   domain        = module.globals.domain
   environment   = module.globals.environment
@@ -145,7 +145,7 @@ module "volunteersystem" {
 }
 
 module "webstorage" {
-  source        = "../../modules/services/vserver"
+  source        = "./modules/services/vserver"
   service_count = 3
   domain        = module.globals.domain
   environment   = module.globals.environment
@@ -206,7 +206,7 @@ module "webstorage" {
 }
 
 module "mail" {
-  source        = "../../modules/services/vserver" #
+  source        = "./modules/services/vserver"
   name_prefix   = "mail"
   service_count = 1
   domain        = module.globals.domain
@@ -349,7 +349,7 @@ module "mail" {
 }
 
 module "icinga" {
-  source        = "../../modules/services/vserver"
+  source        = "./modules/services/vserver"
   name_prefix   = "icinga"
   service_count = 2
   domain        = module.globals.domain
@@ -433,7 +433,7 @@ module "icinga" {
 }
 
 module "dns" {
-  source = "../../modules/dns"
+  source = "./modules/dns"
 
   domains    = module.globals.domains
   subdomains = module.globals.subdomains

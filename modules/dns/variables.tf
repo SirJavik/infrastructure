@@ -77,7 +77,7 @@ variable "mailserver" {
   description = "Mailserver for MX records"
   type        = string
   default     = "mail1-fsn1.infra.sirjavik.de"
-  
+
 }
 
 variable "mailserver_tlsa" {
