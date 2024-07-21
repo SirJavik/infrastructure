@@ -84,6 +84,66 @@ module "loadbalancer" {
   ]
 }
 
+module "volunteersystem" {
+  source        = "../../modules/services/vserver"
+  service_count = 1
+  domain        = module.globals.domain
+  environment   = module.globals.environment
+  network_id    = module.network.network.id
+  ssh_key_ids   = module.globals.ssh_key_ids
+
+  labels = {
+    "managed_by" = "terraform"
+  }
+
+  firewall_rules = [
+    {
+      direction   = "in"
+      protocol    = "tcp"
+      port        = "22"
+      description = "SSH"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
+      protocol    = "tcp"
+      port        = "80"
+      description = "HTTP"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
+      protocol    = "tcp"
+      port        = "443"
+      description = "HTTPS"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    }
+  ]
+
+  volumes = {
+    "wwwdata" = {
+      size = 10
+    },
+    "mysqldata" = {
+      size = 10
+    }
+  }
+
+  depends_on = [
+    module.globals,
+    module.network,
+  ]
+}
+
 module "webstorage" {
   source        = "../../modules/services/vserver"
   service_count = 3
@@ -150,7 +210,7 @@ module "mail" {
   name_prefix   = "mail"
   service_count = 1
   domain        = module.globals.domain
-  type          = "cx32" 
+  type          = "cx32"
   environment   = module.globals.environment
   network_id    = module.network.network.id
   ssh_key_ids   = module.globals.ssh_key_ids

@@ -19,6 +19,5 @@ include:
       opentofu_version: 1.7.1
       state_name: $TF_STATE_NAME
       auto_apply: true
-      root_dir: stage/live
 
 stages: [validate, build, deploy]
