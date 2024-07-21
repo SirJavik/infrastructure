@@ -54,7 +54,7 @@ resource "cloudflare_record" "additional_names_dns_cname" {
   name    = var.additional_names[count.index % length(var.additional_names)]
   value   = hcloud_server.vserver[count.index % var.service_count].name
   type    = "CNAME"
-  ttl     = var.cloudflare_ttl
-  proxied = false
+  ttl     = var.cloudflare_proxied_ttl
+  proxied = true
   comment = "Managed by Terraform"
 }

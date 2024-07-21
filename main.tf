@@ -160,6 +160,8 @@ module "volunteersystem" {
     module.globals,
     module.network,
   ]
+
+  cloudflare_zones = module.globals.cloudflare_zones
 }
 
 module "webstorage" {
@@ -231,6 +233,8 @@ module "webstorage" {
     module.globals,
     module.network,
   ]
+
+  cloudflare_zones = module.globals.cloudflare_zones
 }
 
 module "mail" {
