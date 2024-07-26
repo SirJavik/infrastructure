@@ -42,6 +42,7 @@ variable "domains" {
   default = [
     "benjamin-schneider.com",
     "sirjavik.de",
+    "benny003.de",
     "javik.net",
     "javik.rocks",
     "mondbasis24.de",
@@ -59,6 +60,7 @@ variable "subdomains" {
   default = [
     "www.benjamin-schneider.com",
     "www.sirjavik.de",
+    "www.benny003.de",
     "www.javik.net",
     "www.javik.rocks",
     "www.mondbasis24.de",
@@ -81,6 +83,7 @@ variable "cloudflare_zones" {
     "volunteer.rocks"        = "d8663feb3dd23536c29c7254445e9d19",
     "javik.net"              = "2fc554c6e2f1b0b436dfe108aab4391a",
     "mondbasis24.de"         = "54ede00ad9117a57c27bb69eed67b4de",
-    "undeadbrains.de"        = "a0c43658e705798318f5248a9f3e1177"
+    "undeadbrains.de"        = "a0c43658e705798318f5248a9f3e1177",
+    "benny003.de"            = "89eea9aec8808cb255f2bef6cd700c21",
   }
 }

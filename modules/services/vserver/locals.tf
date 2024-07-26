@@ -61,6 +61,7 @@ locals {
       dns         = floating_ip.dns
       description = floating_ip.description
       location    = floating_ip.location
+      proxy       = floating_ip.proxy  
     }
   ]
 

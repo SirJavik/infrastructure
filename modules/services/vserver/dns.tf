@@ -39,15 +39,10 @@ resource "terraform_data" "domain_data" {
   }
 }
 
-data "cloudflare_zone" "server_zone" {
-  for_each = local.server_domains
-  name     = each.key
-}
-
 resource "cloudflare_record" "ipv4_dns" {
   for_each = local.servers
 
-  zone_id = data.cloudflare_zone.server_zone[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld].id
+  zone_id = var.cloudflare_zones[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld]
   name    = each.value.name
   value   = try(lookup(each.value, "ipv4"), lookup(each.value, "ipv4_address"))
   type    = "A"
@@ -58,7 +53,7 @@ resource "cloudflare_record" "ipv4_dns" {
 resource "cloudflare_record" "ipv6_dns" {
   for_each = local.servers
 
-  zone_id = data.cloudflare_zone.server_zone[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld].id
+  zone_id = var.cloudflare_zones[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld]
   name    = each.value.name
   value   = try(lookup(each.value, "ipv6"), lookup(each.value, "ipv6_address"))
   type    = "AAAA"
@@ -69,7 +64,7 @@ resource "cloudflare_record" "ipv6_dns" {
 resource "cloudflare_record" "txt_dns" {
   for_each = local.servers
 
-  zone_id = data.cloudflare_zone.server_zone[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld].id
+  zone_id = var.cloudflare_zones[terraform_data.domain_data[each.key].triggers_replace.domain_with_tld]
   name    = each.value.name
   value   = each.value.name
   type    = "TXT"

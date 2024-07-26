@@ -99,10 +99,15 @@ variable "floating_ips" {
   type = map(object({
     type        = string
     dns         = list(string)
-    description = string
+    description = optional(string, "")
     location    = string
+    proxy       = optional(bool, false)
   }))
   default = {}
+  validation {
+    condition = alltrue([for ip in var.floating_ips : contains(["ipv4", "ipv6"], ip.type)])
+    error_message = "The type of the floating IP must be either ipv4 or ipv6"
+  }
 }
 
 variable "cloudflare_ttl" {
@@ -124,7 +129,7 @@ variable "firewall_rules" {
     protocol    = string
     port        = string
     source_ips  = list(string)
-    description = string
+    description = optional(string, "")
   }))
   default = []
 }
