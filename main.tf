@@ -31,7 +31,7 @@
 module "globals" {
   source      = "gitlab.com/Javik/terraform-javikweb-modules/globals"
   version     = "~> 1.1.0"
-  environment = "test"
+  environment = "pre"
   domain      = "infra.sirjavik.de"
 }
 

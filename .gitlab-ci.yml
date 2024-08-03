@@ -17,7 +17,7 @@ include:
       # once https://gitlab.com/gitlab-org/gitlab/-/issues/438275 is solved.
       version: 0.21.0
       opentofu_version: 1.7.1
-      state_name: test
+      state_name: preLive
       auto_apply: false
 
 stages: [validate, build, deploy]
