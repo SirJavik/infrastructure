@@ -8,17 +8,23 @@
 #                                    #
 ######################################
 
-# Filename: placement.tf
-# Description: 
-# Version: 1.0
+# Filename: variables.tf
+# Description: Variables for the infrastructure
+# Version: 1.0.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
-# Date: 2024-04-25
-# Last Modified: 2024-04-25
+# Date: 2024-08-03
+# Last Modified: 2024-08-03
 # Changelog: 
-# 1.0 - Initial version 
+# 1.0.0 - Initial version
 
-resource "hcloud_placement_group" "placement_group" {
-  name   = "${var.name_prefix}-placement-group"
-  type   = "spread"
-  labels = var.labels
+variable "hcloud_token" {
+  description = "Hetzner Cloud API Token"
+  sensitive   = true
+  type        = string
+}
+
+variable "cloudflare_api_token" {
+  description = "Cloudflare API Token"
+  sensitive   = true
+  type        = string
 }
