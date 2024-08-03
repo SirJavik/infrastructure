@@ -9,12 +9,14 @@
 ######################################
 
 # Filename: main.tf
-# Description: 
-# Version: 1.4.1
+# Description: Main configuration file
+# Version: 1.5.0
 # Author: Benjamin Schneider <ich@benjamin-schneider.com>
 # Date: 2024-04-24
-# Last Modified: 2024-07-21
+# Last Modified: 2024-08-03
 # Changelog: 
+# 1.5.0 - Use remote modules
+#       - Move vserver modules to subfiles
 # 1.4.1 - Set mailserver to cx32
 # 1.4.0 - Add static cloudflare zones
 # 1.3.0 - Add firewall
@@ -22,54 +24,46 @@
 # 1.1.0 - Support for floating ip multi dns
 # 1.0.0 - Initial version
 
+######################################
+#         Terraform Backend          #
+######################################
+
 terraform {
-  required_providers {
-
-    hcloud = {
-      source  = "hetznercloud/hcloud"
-      version = "~> 1.47.0"
-    }
-
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 4.37.0"
-    }
-
-    acme = {
-      source  = "vancluever/acme"
-      version = "~> 2.24.2"
-    }
-  }
-
   backend "http" {
   }
 }
 
-provider "hcloud" {
-  # Maybe needed later
-}
-
-provider "cloudflare" {
-  # Maybe needed later
-}
-
-provider "acme" {
-  server_url = "https://acme-v02.api.letsencrypt.org/directory"
-}
+######################################
+#             Globals                #
+######################################
 
 module "globals" {
-  source      = "./modules/globals"
+  source      = "gitlab.com/Javik/terraform-javikweb-modules/globals"
+  version     = "~> 1.0.0"
   environment = "live"
+  domain      = "runners.sirjavik.de"
 }
 
+######################################
+#             Network                #
+######################################
+
 module "network" {
-  source      = "./modules/network"
+  source      = "gitlab.com/Javik/terraform-hcloud-modules/network"
+  version     = "~> 1.0.0"
   environment = module.globals.environment
 }
 
+######################################
+#            Load Balancer           #
+######################################
+
+
 module "loadbalancer" {
-  source        = "./modules/services/loadbalancer"
+  source        = "gitlab.com/Javik/terraform-hcloud-loadbalancer"
+  version       = "~> 1.0.0"
   type          = "lb11"
+
   service_count = 1
   domain        = module.globals.domain
   environment   = module.globals.environment
@@ -84,435 +78,9 @@ module "loadbalancer" {
   ]
 }
 
-module "volunteersystem" {
-  source        = "./modules/services/vserver"
-  service_count = 1
-  name_prefix   = "volunteersystem"
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.50.0/24"
-
-  labels = {
-    "managed_by" = "terraform"
-  }
-
-  additional_names = [ 
-    "demo.volunteers.events",
-    "demo.volunteer.rocks",
-    "demo.volunteering.solutions",
-   ]
-
-  firewall_rules = [
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "22"
-      description = "SSH"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "80"
-      description = "HTTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "443"
-      description = "HTTPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "udp"
-      port        = "60000-61000"
-      description = "Mosh"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    }
-  ]
-
-  volumes = {
-    "wwwdata" = {
-      size = 10
-    },
-    "mysqldata" = {
-      size = 10
-    }
-  }
-
-  depends_on = [
-    module.globals,
-    module.network,
-  ]
-
-  cloudflare_zones = module.globals.cloudflare_zones
-}
-
-module "webstorage" {
-  source        = "./modules/services/vserver"
-  service_count = 3
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-
-  labels = {
-    "loadbalancer" = "lb",
-    "managed_by"   = "terraform",
-    "service_type" = "webstorage"
-    "ha"           = true,
-    "ha_group"     = "webstorage"
-    "ha_type"      = "loadbalancer"
-  }
-
-  firewall_rules = [
-    {
-      direction   = "in"
-      protocol    = "ICMP"
-      description = "ICMP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "22"
-      description = "SSH"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "80"
-      description = "HTTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "443"
-      description = "HTTPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "udp"
-      port        = "60000-61000"
-      description = "Mosh"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    }
-  ]
-
-  volumes = {
-    "wwwdata" = {
-      size = 10
-    },
-    "mysqldata" = {
-      size = 10
-    }
-  }
-
-  depends_on = [
-    module.globals,
-    module.network,
-  ]
-
-  cloudflare_zones = module.globals.cloudflare_zones
-}
-
-module "mail" {
-  source        = "./modules/services/vserver"
-  name_prefix   = "mail"
-  service_count = 2
-  domain        = module.globals.domain
-  type          = "cx32"
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.40.0/24"
-
-  labels = {
-    "managed_by"   = "terraform",
-    "service_type" = "mail",
-    "ha"           = true,
-    "ha_group"     = "mail"
-    "ha_type"      = "floating"
-  }
-
-    floating_ips = {
-    "mail_ipv4" = {
-      type = "ipv4"
-      dns = [
-        "mx.sirjavik.de",
-        "mailing.sirjavik.de",
-        "mail-ha.infra.sirjavik.de"
-      ]
-      description = "Mail HA"
-      location    = "fsn1"
-      proxy       = false
-    },
-
-    "mail_ipv6" = {
-      type = "ipv6"
-      dns = [
-        "mx.sirjavik.de",
-        "mailing.sirjavik.de",
-        "mail-ha.infra.sirjavik.de"
-      ]
-      description = "Mail HA"
-      location    = "fsn1"
-      proxy       = false
-    }
-  }
-
-  firewall_rules = [
-    {
-      direction   = "in"
-      protocol    = "ICMP"
-      description = "ICMP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "22"
-      description = "SSH"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "4190"
-      description = "Sieve"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "110"
-      description = "POP3"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "995"
-      description = "POP3S"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "143"
-      description = "IMAP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "993"
-      description = "IMAPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "25"
-      description = "SMTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "465"
-      description = "SMTPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "587"
-      description = "SMTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "80"
-      description = "HTTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "443"
-      description = "HTTPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "udp"
-      port        = "60000-61000"
-      description = "Mosh"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    }
-  ]
-
-  cloudflare_zones = module.globals.cloudflare_zones
-
-  volumes = {
-    "dockerdata" = {
-      size = 50
-    }
-  }
-
-  depends_on = [
-    module.globals,
-    module.network,
-  ]
-}
-
-module "icinga" {
-  source        = "./modules/services/vserver"
-  name_prefix   = "icinga"
-  service_count = 1
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
-  subnet        = "10.0.30.0/24"
-
-  labels = {
-    "managed_by"   = "terraform",
-    "service_type" = "icinga"
-    "ha"           = false,
-    "ha_group"     = "icinga"
-    "ha_type"      = "none"
-  }
-
-  firewall_rules = [
-    {
-      direction   = "in"
-      protocol    = "ICMP"
-      description = "ICMP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "22"
-      description = "SSH"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "80"
-      description = "HTTP"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    },
-    {
-      direction   = "in"
-      protocol    = "tcp"
-      port        = "443"
-      description = "HTTPS"
-      source_ips = [
-        "0.0.0.0/0",
-        "::/0"
-      ]
-    }
-  ]
-
-  cloudflare_zones = module.globals.cloudflare_zones
-  volumes = {
-    "mysqldata" = {
-      size = 10
-    }
-  }
-
-  depends_on = [
-    module.globals,
-    module.network,
-  ]
-}
+######################################
+#         Domain Name System         #
+######################################
 
 module "dns" {
   source = "./modules/dns"
