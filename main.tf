@@ -25,23 +25,14 @@
 # 1.0.0 - Initial version
 
 ######################################
-#         Terraform Backend          #
-######################################
-
-terraform {
-  backend "http" {
-  }
-}
-
-######################################
 #             Globals                #
 ######################################
 
 module "globals" {
   source      = "gitlab.com/Javik/terraform-javikweb-modules/globals"
-  version     = "~> 1.0.0"
+  version     = "~> 1.1.0"
   environment = "live"
-  domain      = "runners.sirjavik.de"
+  domain      = "infra.sirjavik.de"
 }
 
 ######################################
@@ -60,9 +51,9 @@ module "network" {
 
 
 module "loadbalancer" {
-  source        = "gitlab.com/Javik/terraform-hcloud-modules/loadbalancer"
-  version       = "~> 1.0.0"
-  type          = "lb11"
+  source  = "gitlab.com/Javik/terraform-hcloud-modules/loadbalancer"
+  version = "~> 1.0.0"
+  type    = "lb11"
 
   service_count = 1
   domain        = module.globals.domain
@@ -83,7 +74,8 @@ module "loadbalancer" {
 ######################################
 
 module "dns" {
-  source = "./modules/dns"
+  source  = "gitlab.com/Javik/terraform-cloudflare-modules/dns"
+  version = "1.0.3"
 
   domains    = module.globals.domains
   subdomains = module.globals.subdomains

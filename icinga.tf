@@ -18,9 +18,9 @@
 # 1.0.0 - Initial version
 
 module "icinga" {
-  source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
-  version       = "~> 1.0.0"
-  name_prefix   = "icinga"
+  source      = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
+  version     = "> 1.0.0"
+  name_prefix = "icinga"
 
   service_count = 1
   domain        = module.globals.domain

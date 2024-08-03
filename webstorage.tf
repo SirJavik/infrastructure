@@ -19,14 +19,15 @@
 
 module "webstorage" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
-  version       = "~> 1.0.0"
+  version       = "> 1.0.0"
   service_count = 3
-  
-  name_prefix   = "webstorage"
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-  ssh_key_ids   = module.globals.ssh_key_ids
+  subnet        = "10.0.20.0/24"
+
+  name_prefix = "webstorage"
+  domain      = module.globals.domain
+  environment = module.globals.environment
+  network_id  = module.network.network.id
+  ssh_key_ids = module.globals.ssh_key_ids
 
   labels = {
     "loadbalancer" = "lb",
