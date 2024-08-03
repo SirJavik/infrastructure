@@ -60,7 +60,7 @@ module "network" {
 
 
 module "loadbalancer" {
-  source        = "gitlab.com/Javik/terraform-hcloud-loadbalancer"
+  source        = "gitlab.com/Javik/terraform-hcloud-modules/loadbalancer"
   version       = "~> 1.0.0"
   type          = "lb11"
 
