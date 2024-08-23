@@ -358,7 +358,7 @@ module "mailng" {
 
   volumes = {
     "dockerdata" = {
-      size = 50
+      size = 100
     }
   }
 
@@ -366,4 +366,17 @@ module "mailng" {
     module.globals,
     module.network,
   ]
+}
+
+output "volumes" {
+  value = module.mailng.volumes
+}
+
+output "volume_list" {
+  value = module.mailng.volumes_list
+}
+
+output "server_list" {
+  value = module.mailng.server_list
+
 }

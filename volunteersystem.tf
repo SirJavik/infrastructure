@@ -40,6 +40,16 @@ module "volunteersystem" {
   }
 
   firewall_rules = [
+
+    {
+      direction   = "in"
+      protocol    = "icmp"
+      description = "icmp"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
     {
       direction   = "in"
       protocol    = "tcp"
