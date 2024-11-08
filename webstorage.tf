@@ -20,7 +20,7 @@
 module "webstorage" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
   version       = "> 1.0.0"
-  service_count = 3
+  service_count = 1
   subnet        = "10.0.20.0/24"
 
   name_prefix = "webstorage"

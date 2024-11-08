@@ -180,7 +180,7 @@ module "mail" {
 module "mailng" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
   version       = "> 1.0.0"
-  service_count = 2
+  service_count = 0
 
   name_prefix = "mailng"
   domain      = module.globals.domain
