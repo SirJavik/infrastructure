@@ -81,9 +81,9 @@ module "dns" {
   subdomains = module.globals.subdomains
 
   loadbalancer = {
-    for server in module.loadbalancer.server : server.name => {
-      ipv4 = server.ipv4
-      ipv6 = server.ipv6
+    for server in module.webstorage.server : server.name => {
+      ipv4 = server.ipv4_address
+      ipv6 = server.ipv6_address
     }
   }
 
