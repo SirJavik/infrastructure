@@ -22,7 +22,7 @@ module "icinga" {
   version     = "> 1.0.0"
   name_prefix = "icinga"
 
-  service_count = 0
+  service_count = 1
   domain        = module.globals.domain
   environment   = module.globals.environment
   network_id    = module.network.network.id
