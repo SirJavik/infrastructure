@@ -20,7 +20,7 @@
 module "volunteersystem" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
   version       = "> 1.0.0"
-  service_count = 1
+  service_count = 0
 
   name_prefix = "volunteersystem"
   domain      = module.globals.domain
@@ -41,6 +41,16 @@ module "volunteersystem" {
 
   firewall_rules = [
 
+    {
+      direction   = "in"
+      protocol    = "udp"
+      port        = "51820"
+      description = "WireGuard"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
     {
       direction   = "in"
       protocol    = "icmp"

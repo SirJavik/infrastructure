@@ -41,6 +41,16 @@ module "webstorage" {
   firewall_rules = [
     {
       direction   = "in"
+      protocol    = "udp"
+      port        = "51820"
+      description = "WireGuard"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      direction   = "in"
       protocol    = "icmp"
       description = "icmp"
       source_ips = [

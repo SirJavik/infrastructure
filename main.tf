@@ -75,7 +75,7 @@ module "loadbalancer" {
 
 module "dns" {
   source  = "gitlab.com/Javik/terraform-cloudflare-modules/dns"
-  version = "1.0.3"
+  version = "~> 1.0.3"
 
   domains    = module.globals.domains
   subdomains = module.globals.subdomains
@@ -91,6 +91,11 @@ module "dns" {
     "javik.rocks"     = "did=did:plc:qe3p2rk7bswukxiwxbrjzwxn",
     "dev.javik.rocks" = "did=did:plc:6ar6r5waxzs2xykii5gh6zbo",
     "javik.net"       = "did=did:plc:k3ltdspf7njfzg6um25uvvly"
+  }
+
+  google-site-verification = {
+    "javik.net"              = "google-site-verification=TR6wQMAd0f6trAWDMImb8rM2jGJRbVcxWEb5-RWd-Z4"
+    "benjamin-schneider.com" = "google-site-verification=cP5xYvh8OpPSTsuVo34CbVjX7vZpzW4Mfa7D9aN0QVw"
   }
 
   dkim = {

@@ -29,6 +29,18 @@ module "icinga" {
   ssh_key_ids   = module.globals.ssh_key_ids
   subnet        = "10.0.30.0/24"
 
+  additional_names = {
+    "icinga.sirjavik.de" = {
+      override = false
+      proxy    = false
+    },
+
+    "icingaweb.sirjavik.de" = {
+      override = false
+      proxy    = false
+    }
+  }
+
   labels = {
     "managed_by"   = "terraform",
     "service_type" = "icinga"
@@ -38,6 +50,17 @@ module "icinga" {
   }
 
   firewall_rules = [
+    {
+      direction   = "in"
+      protocol    = "udp"
+      port        = "51820"
+      description = "WireGuard"
+      source_ips = [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+
     {
       direction   = "in"
       protocol    = "icmp"
