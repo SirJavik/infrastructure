@@ -21,7 +21,7 @@ module "pds" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
   version       = "> 1.0.0"
   service_count = 1
-  subnet        = "10.0.10.0/24"
+  subnet        = "10.0.70.0/24"
 
   name_prefix = "pds"
   domain      = module.globals.domain
