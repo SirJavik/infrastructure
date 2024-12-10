@@ -16,4 +16,4 @@ include:
       state_name: live
       base_os: debian
 
-stages: [validate, test, build, deploy, cleanup]
+stages: [validate, test, build, deploy]
