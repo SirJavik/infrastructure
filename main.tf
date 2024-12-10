@@ -115,7 +115,6 @@ module "dns" {
   depends_on = [
     module.globals,
     module.webstorage,
-    module.loadbalancer,
     module.icinga,
     module.mail
   ]
