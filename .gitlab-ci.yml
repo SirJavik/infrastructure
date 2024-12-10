@@ -8,15 +8,11 @@
 #                                    #
 ######################################
 
-# Using version `0.10.0`:
 include:
-  - component: gitlab.com/components/opentofu/validate-plan-apply@0.21.0
+  - component: gitlab.com/components/opentofu/validate-plan-apply@0.47.0
     inputs:
-      # The version must currently be specified explicitly as an input,
-      # to find the correctly associated images. # This can be removed
-      # once https://gitlab.com/gitlab-org/gitlab/-/issues/438275 is solved.
-      version: 0.21.0
-      opentofu_version: 1.7.1
+      version: 0.47.0
+      opentofu_version: 1.8.7
       state_name: live
       auto_apply: true
 
