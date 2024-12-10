@@ -50,24 +50,24 @@ module "network" {
 ######################################
 
 
-module "loadbalancer" {
-  source  = "gitlab.com/Javik/terraform-hcloud-modules/loadbalancer"
-  version = "~> 1.0.0"
-  type    = "lb11"
-
-  service_count = 0
-  domain        = module.globals.domain
-  environment   = module.globals.environment
-  network_id    = module.network.network.id
-
-  targets_use_private_ip = true
-
-  depends_on = [
-    module.globals,
-    module.network,
-    module.webstorage
-  ]
-}
+#module "loadbalancer" {
+#  source  = "gitlab.com/Javik/terraform-hcloud-modules/loadbalancer"
+#  version = "~> 1.0.0"
+#  type    = "lb11"
+#
+#  service_count = 0
+#  domain        = module.globals.domain
+#  environment   = module.globals.environment
+#  network_id    = module.network.network.id
+#
+#  targets_use_private_ip = true
+#
+#  depends_on = [
+#    module.globals,
+#    module.network,
+#    module.webstorage
+#  ]
+#}
 
 ######################################
 #         Domain Name System         #
