@@ -100,8 +100,14 @@ module "pds" {
     }
   ]
 
-  volumes = {
-  }
+  additional_names = [
+    "sky.sirjavik.de",
+    "sky.javik.net",
+    "sky.javik.rocks",
+    "pds.sirjavik.de",
+    "pds.javik.net",
+    "pds.javik.rocks",
+  ]
 
   depends_on = [
     module.globals,
