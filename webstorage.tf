@@ -42,7 +42,7 @@ module "webstorage" {
     {
       direction   = "in"
       protocol    = "udp"
-      port        = "51820"
+      port        = "51820-51830"
       description = "WireGuard"
       source_ips = [
         "0.0.0.0/0",
