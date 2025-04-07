@@ -30,6 +30,9 @@ module "mail" {
   ssh_key_ids = module.globals.ssh_key_ids
   subnet      = "10.0.40.0/24"
 
+  backups     = true
+  protected   = true
+
   labels = {
     "managed_by"   = "terraform",
     "service_type" = "mail",
