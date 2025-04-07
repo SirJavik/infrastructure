@@ -19,7 +19,7 @@
 
 module "mail" {
   source        = "gitlab.com/Javik/terraform-hcloud-modules/vserver"
-  version       = "> 1.0.0"
+  version       = "> 1.5.9"
   service_count = 1
 
   name_prefix = "mail"
@@ -29,9 +29,8 @@ module "mail" {
   network_id  = module.network.network.id
   ssh_key_ids = module.globals.ssh_key_ids
   subnet      = "10.0.40.0/24"
-
-  backups   = true
-  protected = true
+  backups     = true
+  protected   = true
 
   labels = {
     "managed_by"   = "terraform",
