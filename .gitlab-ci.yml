@@ -9,10 +9,10 @@
 ######################################
 
 include:
-  - component: gitlab.com/components/opentofu/validate-plan-apply@0.47.0
+  - component: gitlab.com/components/opentofu/validate-plan-apply@1.1.0
     inputs:
-      version: 0.47.0
-      opentofu_version: 1.8.7
+      version: 1.1.0
+      opentofu_version: 1.9.0
       state_name: live
       base_os: debian
 
